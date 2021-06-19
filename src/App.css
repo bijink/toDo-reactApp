@@ -9,7 +9,7 @@ body {
 
 .mainHeading {
    text-align: center;
-   margin-top: 0.5rem;
+   margin-top: 2rem;
    color: white;
 }
 
@@ -59,7 +59,6 @@ body {
    font-size: larger;
    font-weight: 900;
    color: grey;
-   /* margin-right: 5px; */
 }
 
 .container {
@@ -69,7 +68,6 @@ body {
    margin-top: 2rem;
    margin-left: 2.5rem;
    border-radius: .25rem;
-   /* border-top-right-radius: .25rem; */
    padding-top: 1rem;
    padding-bottom: 1rem;
 }
@@ -81,6 +79,37 @@ body {
    justify-content: center;
    align-items: center;
    flex-direction: column;
+}
+.container.deleted .todo {
+   display: grid;
+   grid-template-columns: auto auto auto;
+   grid-template-rows: auto auto;
+}
+
+.container.deleted .todo .right {
+   grid-column-start: 2;
+   grid-column-end: 3;
+   grid-row-start: 1;
+   grid-row-end: 3;
+}
+.container.deleted .todo .rightEnd {
+   grid-column-start: 3;
+   grid-column-end: 4;
+   grid-row-start: 1;
+   grid-row-end: 3;
+}
+
+.container.deleted .todo .right i {
+   margin-left: -1.1rem;
+   color: royalblue;
+}
+.container.deleted .todo .rightEnd i {
+   margin-top: .16rem;
+   color: rgb(69, 69, 69);
+}
+.container.deleted .todo.lite .top p {
+   width: 19rem;
+   word-wrap: break-word;
 }
 
 .container.progressing {
@@ -101,6 +130,18 @@ body {
    flex-direction: column;
 }
 
+.container.completed .todo .right i {
+   margin-left: 1.1rem;
+   color: rgb(69, 69, 69);
+}
+
+.container.completed .todo .right {
+   grid-column-start: 2;
+   grid-column-end: 3;
+   grid-row-start: 1;
+   grid-row-end: 3;
+}
+
 .container .top p {
    width: 20.2rem;
    word-wrap: break-word;
@@ -112,24 +153,24 @@ body {
 }
 
 .container.progressing .todo {
-   margin-top: .5rem;
    width: 23rem;
    height: 100%;
    background-color: rgb(241, 241, 241, 0.2);
-   border-radius: .25rem;
+   margin-top: .5rem;
    padding: 5px;
+   border-radius: .25rem;
    display: grid;
    grid-template-columns: auto auto auto;
    grid-template-rows: auto auto;
 }
 
 .container .todo.lite {
-   margin-top: .5rem;
    width: 23rem;
    height: 100%;
    background-color: rgb(241, 241, 241, 0.2);
-   border-radius: .25rem;
+   margin-top: .5rem;
    padding: 5px;
+   border-radius: .25rem;
    display: grid;
    grid-template-rows: auto auto;
 }
@@ -148,11 +189,12 @@ body {
    grid-row-end: 3;
 }
 
-.container .todo .left input {
+.container .todo .left i {
    cursor: pointer;
    float: left;
    margin-top: .16rem;
    margin-right: .4rem;
+   color: seagreen;
 }
 
 .container .todo .top {
@@ -177,9 +219,9 @@ body {
 }
 
 .container .todo .right {
-   display: flex;
+   /* display: flex;
    justify-content: center;
-   align-items: center;
+   align-items: center; */
    margin-left: -0.5rem;
    grid-column-start: 3;
    grid-column-end: 3;
@@ -188,7 +230,9 @@ body {
 }
 
 .container .todo .right i {
-   color: black;
+   color: brown;
+   cursor: pointer;
+   margin-top: .16rem;
 }
 
 .textCross {
