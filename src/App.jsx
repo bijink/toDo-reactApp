@@ -26,30 +26,30 @@ function App() {
          </div>
 
          <div className="toDoInput">
-            <input value={toDo} onChange={(e) => setToDo(e.target.value)} type="text" placeholder="🖊️ Add item..." />
-            <i onClick={() => setToDos([...toDos, { text: toDo, toDoTime: timeDateDay }])} className="fas fa-plus"></i>
+            <div className="left">
+               <input value={toDo} onChange={(e) => setToDo(e.target.value)} type="text" placeholder="🖊️ Add item..." />
+            </div>
+            <div className="right">
+               <i onClick={() => setToDos([...toDos, { id: Date.now(), text: toDo, toDoTime: timeDateDay, statusComplete: false, statusDelete: false }])} className="fas fa-plus"></i>
+            </div>
          </div>
 
-         <div className="container deleted">
-            <h3>Trash</h3>
+         <div className="container completed">
+            <h3>Done</h3>
             {
                toDos.map((obj) => {
-                  return (
-                     <div className="todo">
-                        <div className="left">
-                           <input type="checkbox" name="" id="" />
+                  if (obj.statusComplete) {
+                     return (
+                        <div className="todo lite">
+                           <div className="top">
+                              <p className="textCross">{obj.text}</p>
+                           </div>
+                           <div className="bottom">
+                              <p>{obj.toDoTime}</p>
+                           </div>
                         </div>
-                        <div className="top">
-                           <p></p>
-                        </div>
-                        <div className="bottom">
-                           <p className="dateTimeDay"></p>
-                        </div>
-                        <div className="right">
-                           <i className="fas fa-times"></i>
-                        </div>
-                     </div>
-                  );
+                     );
+                  }
                })
             }
          </div>
@@ -58,46 +58,62 @@ function App() {
             <h3>On Going</h3>
             {
                toDos.map((obj) => {
-                  return (
-                     <div className="todo">
-                        <div className="left">
-                           <input type="checkbox" name="" id="" />
+                  if (!obj.statusComplete && !obj.statusDelete)
+                     return (
+                        <div className="todo">
+                           <div className="left">
+                              <input onChange={(e) => {
+                                 console.log(e.target.checked);
+                                 console.log(obj);
+                                 setToDos(toDos.filter((obj2) => {
+                                    if (obj2.id === obj.id) {
+                                       obj2.statusComplete = e.target.checked;
+
+                                    }
+                                    return obj2;
+                                 }));
+                              }} value={obj.statusComplete} type="checkbox" name="" id="" />
+                           </div>
+                           <div className="top">
+                              <p>{obj.text}</p>
+                           </div>
+                           <div className="bottom">
+                              <p>{obj.toDoTime}</p>
+                           </div>
+                           <div className="right">
+                              <i onClick={(e) => {
+                                 e.target.value = true;
+                                 console.log(obj);
+                                 setToDos(toDos.filter((obj3) => {
+                                    if (obj3.id === obj.id) {
+                                       obj3.statusDelete = e.target.value;
+                                    }
+                                    return obj3;
+                                 }));
+                              }} value={obj.statusDelete} className="fas fa-times"></i>
+                           </div>
                         </div>
-                        <div className="top">
-                           <p>{obj.text}</p>
-                        </div>
-                        <div className="bottom">
-                           <p>{obj.toDoTime}</p>
-                        </div>
-                        <div className="right">
-                           <i className="fas fa-times"></i>
-                        </div>
-                     </div>
-                  );
+                     );
                })
             }
          </div>
 
-         <div className="container completed">
-            <h3>Done</h3>
+         <div className="container deleted">
+            <h3>Dropped</h3>
             {
                toDos.map((obj) => {
-                  return (
-                     <div className="todo">
-                        <div className="left">
-                           <input type="checkbox" name="" id="" />
+                  if (obj.statusDelete) {
+                     return (
+                        <div className="todo lite">
+                           <div className="top">
+                              <p className="textCross">{obj.text}</p>
+                           </div>
+                           <div className="bottom">
+                              <p>{obj.toDoTime}</p>
+                           </div>
                         </div>
-                        <div className="top">
-                           <p></p>
-                        </div>
-                        <div className="bottom">
-                           <p className="dateTimeDay"></p>
-                        </div>
-                        <div className="right">
-                           <i className="fas fa-times"></i>
-                        </div>
-                     </div>
-                  );
+                     );
+                  }
                })
             }
          </div>
