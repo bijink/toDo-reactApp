@@ -7,6 +7,56 @@ body {
    background-color: rgb(0, 0, 0);
 }
 
+.gradient-text {
+   background-image: linear-gradient(10deg, rgb(0, 255, 110), rgb(255, 183, 0), rgb(255, 0, 0));
+   background-clip: text;
+   -webkit-text-fill-color: transparent;
+}
+
+.gradient-text2 {
+   background-image: linear-gradient(45deg, rgb(135, 255, 251), rgb(255, 145, 145));
+   background-clip: text;
+   -webkit-text-fill-color: transparent;
+}
+
+.textCross {
+   text-decoration: line-through;
+}
+
+/* ** i tag ** */
+
+i {
+   cursor: pointer;
+}
+
+.toDoInput .right i {
+   font-size: large;
+   color: rgb(0, 0, 0);
+}
+
+.container i {
+   font-size: larger;
+   margin-top: .16rem;
+}
+
+.container .toDo .bin i {
+   color: rgb(69, 69, 69);
+}
+
+.container .toDo .close i {
+   color: brown;
+}
+
+.container .toDo .tick i {
+   color: seagreen;
+}
+
+.container .toDo .recycle i {
+   color: royalblue;
+}
+
+/* ** Headings ** */
+
 .mainHeading {
    text-align: center;
    margin-top: 2rem;
@@ -18,29 +68,32 @@ body {
    color: white;
 }
 
+/* ** ToDO Input ** */
+
 .toDoInput {
-   width: 24.7rem;
+   width: 30%;
    height: 3.5rem;
    background-color: rgb(255, 255, 255);
    box-shadow: 0 0 2px 1px rgb(255, 255, 255);
+   margin: auto;
    margin-top: 1rem;
-   margin-left: 30rem;
-   border: none;
    border-radius: .25rem;
    display: grid;
    grid-template-columns: 90% 10%;
 }
 
 .toDoInput .left input {
-   width: 100%;
-   height: 97%;
-   margin-top: .04rem;
-   border-radius: .25rem;
-   border-color: transparent;
-   outline-color: transparent;
-   font-size: x-large;
-   padding-left: .3rem;
+   width: 98%;
+   height: 90%;
+   margin-top: .8%;
+   margin-left: 1%;
    border: unset;
+   border-radius: .25rem;
+   outline: none;
+   padding-left: .3rem;
+   font-size: x-large;
+   font-family: inherit;
+   font-weight: bold;
 }
 
 .toDoInput .right {
@@ -49,192 +102,183 @@ body {
    align-items: center;
 }
 
-.toDoInput .right i {
-   font-size: x-large;
-   color: rgb(0, 0, 0);
-}
-
-.app i {
-   cursor: pointer;
-   font-size: larger;
-   font-weight: 900;
-   color: grey;
-}
+/* ** Container ** */
 
 .container {
    height: 100%;
-   width: 25rem;
+   width: 30%;
    float: left;
-   margin-top: 2rem;
-   margin-left: 2.5rem;
-   border-radius: .25rem;
+   margin-top: 2.5%;
+   margin-left: 2.5%;
    padding-top: 1rem;
    padding-bottom: 1rem;
-}
-
-.container.deleted {
-   background-color: brown;
-   box-shadow: 0 0 2px 2px brown;
+   border-radius: .25rem;
    display: flex;
    justify-content: center;
    align-items: center;
    flex-direction: column;
 }
-.container.deleted .todo {
+
+.container .toDo {
+   width: 92%;
+   height: 100%;
+   background-color: rgb(241, 241, 241, 0.2);
+   margin-top: .5rem;
+   padding: 5px;
+   border-radius: .25rem;
+   transition: width 200ms;
+}
+
+.container .toDo:hover {
+   background-color: rgba(241, 241, 241, 0.313);
+   width: 95%;
+}
+
+.container .toDo .top p {
+   word-wrap: break-word;
+   text-align: justify;
+   font-size: large;
+   font-weight: 700;
+   cursor: default;
+}
+
+.container .toDo .bottom p {
+   font-size: small;
+   cursor: default;
+}
+
+/* ** Container Completed ** */
+
+.container.completed {
+   background-color: seagreen;
+   box-shadow: 0 0 2px 2px seagreen;
+}
+
+.container.completed .toDo {
    display: grid;
    grid-template-columns: auto auto auto;
    grid-template-rows: auto auto;
 }
 
-.container.deleted .todo .right {
-   grid-column-start: 2;
-   grid-column-end: 3;
+.container.completed .toDo .top {
+   width: 25.5vw;
+}
+
+.container.completed .toDo .left {
+   grid-column-start: 1;
+   grid-column-end: 2;
    grid-row-start: 1;
    grid-row-end: 3;
 }
-.container.deleted .todo .rightEnd {
+
+
+.container.completed .toDo .right {
    grid-column-start: 3;
    grid-column-end: 4;
    grid-row-start: 1;
    grid-row-end: 3;
 }
 
-.container.deleted .todo .right i {
-   margin-left: -1.1rem;
-   color: royalblue;
-}
-.container.deleted .todo .rightEnd i {
-   margin-top: .16rem;
-   color: rgb(69, 69, 69);
-}
-.container.deleted .todo.lite .top p {
-   width: 19rem;
-   word-wrap: break-word;
-}
+/* ** Container Progressing ** */
 
 .container.progressing {
    background-color: darkgoldenrod;
    box-shadow: 0 0 2px 2px darkgoldenrod;
-   display: flex;
-   justify-content: center;
-   align-items: center;
-   flex-direction: column;
 }
 
-.container.completed {
-   background-color: seagreen;
-   box-shadow: 0 0 2px 2px seagreen;
-   display: flex;
-   justify-content: center;
-   align-items: center;
-   flex-direction: column;
+.container.progressing .toDo {
+   display: grid;
+   grid-template-columns: auto auto auto;
+   grid-template-rows: auto auto;
 }
 
-.container.completed .todo .right i {
-   margin-left: 1.1rem;
-   color: rgb(69, 69, 69);
+.container.progressing .toDo .top {
+   width: 24vw;
 }
 
-.container.completed .todo .right {
+.container.progressing .toDo .left {
+   grid-column-start: 1;
+   grid-column-end: 2;
+   grid-row-start: 1;
+   grid-row-end: 3;
+}
+
+.container.progressing .toDo .right {
+   grid-column-start: 3;
+   grid-column-end: 4;
+   grid-row-start: 1;
+   grid-row-end: 3;
+}
+
+/* ** Container Deleted ** */
+
+.container.deleted {
+   background-color: brown;
+   box-shadow: 0 0 2px 2px brown;
+}
+
+.container.deleted .toDo {
+   display: grid;
+   grid-template-columns: auto auto auto auto auto;
+   grid-template-rows: auto auto;
+}
+
+.container.deleted .toDo .top {
+   width: 23.5vw;
+}
+.container.deleted .toDo .leftEnd {
+   grid-column-start: 1;
+   grid-column-end: 2;
+   grid-row-start: 1;
+   grid-row-end: 3;
+}
+
+.container.deleted .toDo .left {
    grid-column-start: 2;
    grid-column-end: 3;
    grid-row-start: 1;
    grid-row-end: 3;
 }
 
-.container .top p {
-   width: 20.2rem;
-   word-wrap: break-word;
-}
-
-.container .todo.lite .top p {
-   width: 23rem;
-   word-wrap: break-word;
-}
-
-.container.progressing .todo {
-   width: 23rem;
-   height: 100%;
-   background-color: rgb(241, 241, 241, 0.2);
-   margin-top: .5rem;
-   padding: 5px;
-   border-radius: .25rem;
-   display: grid;
-   grid-template-columns: auto auto auto;
-   grid-template-rows: auto auto;
-}
-
-.container .todo.lite {
-   width: 23rem;
-   height: 100%;
-   background-color: rgb(241, 241, 241, 0.2);
-   margin-top: .5rem;
-   padding: 5px;
-   border-radius: .25rem;
-   display: grid;
-   grid-template-rows: auto auto;
-}
-
-.container .todo.lite .left {
-   grid-column-start: 1;
-   grid-column-end: 2;
+.container.deleted .toDo .right {
+   grid-column-start: 4;
+   grid-column-end: 5;
    grid-row-start: 1;
    grid-row-end: 3;
 }
 
-.container .todo .left {
-   grid-column-start: 1;
-   grid-column-end: 2;
+.container.deleted .toDo .rightEnd {
+   grid-column-start: 5;
+   grid-column-end: 6;
    grid-row-start: 1;
    grid-row-end: 3;
+   padding-left: .5vw;
 }
 
-.container .todo .left i {
-   cursor: pointer;
-   float: left;
-   margin-top: .16rem;
-   margin-right: .4rem;
-   color: seagreen;
+/* ** media queries for setting width of 'toDo' below 950px display ** */
+
+@media only screen and (max-width:950px) {
+   .container.completed .toDo .top {
+      width: 23vw;
+   }
+   .container.progressing .toDo .top {
+      width: 18.5vw;
+      margin-left: 1vw;
+   }
+   .container.progressing .toDo .bottom {
+      width: 18.5vw;
+      margin-left: 1vw;
+   }
+   .container.deleted .toDo .top {
+      width: 19vw;
+   }
+   .container.deleted .toDo .rightEnd {
+      padding-left: 1vw;
+   }
 }
 
-.container .todo .top {
-   width: 20.2rem;
-   text-align: justify;
-}
-
-.container .todo .top p {
-   font-size: large;
-   font-weight: 700;
-   font-style: normal;
-   color: rgb(0, 0, 0);
-   float: left;
-}
-
-.container .todo .bottom {
-   width: 21rem;
-}
-
-.container .todo .bottom p {
-   font-size: small;
-}
-
-.container .todo .right {
-   /* display: flex;
-   justify-content: center;
-   align-items: center; */
-   margin-left: -0.5rem;
-   grid-column-start: 3;
-   grid-column-end: 3;
-   grid-row-start: 1;
-   grid-row-end: 3;
-}
-
-.container .todo .right i {
-   color: brown;
-   cursor: pointer;
-   margin-top: .16rem;
-}
-
-.textCross {
-   text-decoration: line-through;
+@media only screen and (max-width:800px) {
+   .toDoInput {
+      width: 95%;
+   }
 }

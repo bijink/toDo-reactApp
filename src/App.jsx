@@ -14,8 +14,14 @@ function App() {
    const currDate = new Date();
    const hours = currDate.getHours();
    const AMorPM = hours >= 12 ? 'PM' : 'AM';
-   const hour = hours % 12;
-   const toDoTime = hour + ':' + currDate.getMinutes() + ':' + currDate.getSeconds() + ' ' + AMorPM;
+   var hour = hours % 12;
+   var hour12 = () => {
+      if (hour === 0) {
+         hour = 12;
+      }
+      return hour;
+   };
+   const toDoTime = hour12() + ':' + currDate.getMinutes() + ':' + currDate.getSeconds() + ' ' + AMorPM;
    const toDoDate = currDate.getDate() + '.' + currDate.getMonth() + '.' + currDate.getFullYear();
    const toDoDay = dayNamesShort[currDate.getDay()];
    const toDoTimeDateDay = toDoTime + ' ' + toDoDate + ' ' + toDoDay;
@@ -25,16 +31,16 @@ function App() {
 
          <div className="headings">
             <div className="mainHeading">
-               <h1>ToDo List</h1>
+               <h1 className="gradient-text">ToDo List</h1>
             </div>
             <div className="subHeading">
-               <h2>Whoop, it's {day}</h2>
+               <h2 className="gradient-text2">Wow, it's {day}</h2>
             </div>
          </div>
 
          <div className="toDoInput">
             <div className="left">
-               <input value={toDo} onChange={(e) => setToDo(e.target.value)} type="text" placeholder="🖊️ Add item..." />
+               <input value={toDo} onChange={(e) => setToDo(e.target.value)} type="text" placeholder=" 🖋 Plan Something . . ." />
             </div>
             <div className="right">
                <i onClick={() => {
@@ -51,14 +57,15 @@ function App() {
                toDos.map((obj) => {
                   if (obj.statusComplete && !obj.statusBin) {
                      return (
-                        <div className="todo lite">
+                        <div className="toDo">
+                           <div className="left"></div>
                            <div className="top">
                               <p className="textCross">{obj.text}</p>
                            </div>
                            <div className="bottom">
                               <p>{obj.toDoTime}</p>
                            </div>
-                           <div className="right">
+                           <div className="right bin">
                               <i onClick={(e) => {
                                  e.target.value = true;
                                  setToDos(toDos.filter((obj5) => {
@@ -82,8 +89,8 @@ function App() {
                toDos.map((obj) => {
                   if (!obj.statusComplete && !obj.statusDelete) {
                      return (
-                        <div className="todo">
-                           <div className="left">
+                        <div className="toDo">
+                           <div className="left tick">
                               <i onClick={(e) => {
                                  e.target.value = true;
                                  setToDos(toDos.filter((obj2) => {
@@ -100,7 +107,7 @@ function App() {
                            <div className="bottom">
                               <p>{obj.toDoTime}</p>
                            </div>
-                           <div className="right">
+                           <div className="right close">
                               <i onClick={(e) => {
                                  e.target.value = true;
                                  setToDos(toDos.filter((obj3) => {
@@ -115,8 +122,8 @@ function App() {
                      );
                   } else if (obj.statusRecycle && !obj.statusComplete) {
                      return (
-                        <div className="todo">
-                           <div className="left">
+                        <div className="toDo">
+                           <div className="left tick">
                               <i onClick={(e) => {
                                  e.target.value = true;
                                  setToDos(toDos.filter((obj2) => {
@@ -133,7 +140,7 @@ function App() {
                            <div className="bottom">
                               <p>{obj.toDoTime}</p>
                            </div>
-                           <div className="right">
+                           <div className="right close">
                               <i onClick={(e) => {
                                  e.target.value = true;
                                  setToDos(toDos.filter((obj3) => {
@@ -158,14 +165,16 @@ function App() {
                toDos.map((obj) => {
                   if (obj.statusDelete && !obj.statusRecycle && !obj.statusBin) {
                      return (
-                        <div className="todo lite">
+                        <div className="toDo">
+                           <div className="leftEnd"></div>
+                           <div className="left"></div>
                            <div className="top">
                               <p className="textCross">{obj.text}</p>
                            </div>
                            <div className="bottom">
                               <p>{obj.toDoTime}</p>
                            </div>
-                           <div className="right">
+                           <div className="right recycle">
                               <i onClick={(e) => {
                                  e.target.value = true;
                                  setToDos(toDos.filter((obj4) => {
@@ -176,7 +185,7 @@ function App() {
                                  }));
                               }} value={obj.statusRecycle} className="fas fa-redo-alt"></i>
                            </div>
-                           <div className="rightEnd">
+                           <div className="rightEnd bin">
                               <i onClick={(e) => {
                                  e.target.value = true;
                                  setToDos(toDos.filter((obj6) => {
