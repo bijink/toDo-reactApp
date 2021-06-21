@@ -26,6 +26,13 @@ function App() {
    const toDoDay = dayNamesShort[currDate.getDay()];
    const toDoTimeDateDay = toDoTime + ' ' + toDoDate + ' ' + toDoDay;
 
+   const handleUserInput = (e) => {
+      setToDo(e.target.value);
+   };
+   const resetInputField = () => {
+      setToDo('');
+   };
+
    return (
       <div className="app">
 
@@ -34,28 +41,31 @@ function App() {
                <h1 className="gradient-text">ToDo List</h1>
             </div>
             <div className="subHeading">
-               <h2 className="gradient-text2">Wow, it's {day}</h2>
+               <h2 className="gradient-text2">Hey, it's {day}</h2>
             </div>
          </div>
 
          <div className="toDoInput">
             <div className="left">
-               <input value={toDo} onChange={(e) => setToDo(e.target.value)} type="text" placeholder=" 🖋 Plan Something . . ." />
+               <input value={toDo} onChange={handleUserInput} type="text" placeholder=" Plan Something . . ." />
             </div>
             <div className="right">
+               <i onClick={resetInputField} className="fas fa-eraser" title="Clear"></i>
+            </div>
+            <div className="rightEnd  add">
                <i onClick={() => {
                   if (toDo) {
-                     setToDos([...toDos, { id: Date.now(), text: toDo, toDoTime: toDoTimeDateDay, statusComplete: false, statusDelete: false, statusRecycle: false, statusBin: false }]);
+                     setToDos([...toDos, { id: Date.now(), text: toDo, toDoTime: toDoTimeDateDay, statusErase: false, statusDone: false, statusDrop: false, statusRetrieve: false, statusRemove: false }]);
                   }
-               }} className="fas fa-plus"></i>
+               }} className="fas fa-plus" title="Add"></i>
             </div>
          </div>
 
-         <div className="container completed">
+         <div className="container done">
             <h3>Done</h3>
             {
                toDos.map((obj) => {
-                  if (obj.statusComplete && !obj.statusBin) {
+                  if (obj.statusDone && !obj.statusRemove) {
                      return (
                         <div className="toDo">
                            <div className="left"></div>
@@ -67,14 +77,17 @@ function App() {
                            </div>
                            <div className="right bin">
                               <i onClick={(e) => {
-                                 e.target.value = true;
-                                 setToDos(toDos.filter((obj5) => {
-                                    if (obj5.id === obj.id) {
-                                       obj5.statusBin = e.target.value;
+                                 let isdelete = window.confirm("Deleting ToDo permanently !");
+                                 if (isdelete) {
+                                    e.target.value = true;
+                                 }
+                                 setToDos(toDos.filter((obj2) => {
+                                    if (obj2.id === obj.id) {
+                                       obj2.statusRemove = e.target.value;
                                     }
-                                    return obj5;
+                                    return obj2;
                                  }));
-                              }} value={obj.statusBin} className="fas fa-trash-alt"></i>
+                              }} value={obj.statusRemove} className="fas fa-trash-alt" title="Remove"></i>
                            </div>
                         </div>
                      );
@@ -83,11 +96,11 @@ function App() {
             }
          </div>
 
-         <div className="container progressing">
+         <div className="container onGoing">
             <h3>On Going</h3>
             {
                toDos.map((obj) => {
-                  if (!obj.statusComplete && !obj.statusDelete) {
+                  if (!obj.statusDone && !obj.statusDrop) {
                      return (
                         <div className="toDo">
                            <div className="left tick">
@@ -95,11 +108,11 @@ function App() {
                                  e.target.value = true;
                                  setToDos(toDos.filter((obj2) => {
                                     if (obj2.id === obj.id) {
-                                       obj2.statusComplete = e.target.value;
+                                       obj2.statusDone = e.target.value;
                                     }
                                     return obj2;
                                  }));
-                              }} value={obj.statusComplete} className="fas fa-check"></i>
+                              }} value={obj.statusDone} className="fas fa-check" title="Done"></i>
                            </div>
                            <div className="top">
                               <p>{obj.text}</p>
@@ -110,17 +123,17 @@ function App() {
                            <div className="right close">
                               <i onClick={(e) => {
                                  e.target.value = true;
-                                 setToDos(toDos.filter((obj3) => {
-                                    if (obj3.id === obj.id) {
-                                       obj3.statusDelete = e.target.value;
+                                 setToDos(toDos.filter((obj2) => {
+                                    if (obj2.id === obj.id) {
+                                       obj2.statusDrop = e.target.value;
                                     }
-                                    return obj3;
+                                    return obj2;
                                  }));
-                              }} value={obj.statusDelete} className="fas fa-times"></i>
+                              }} value={obj.statusDrop} className="fas fa-times" title="Drop"></i>
                            </div>
                         </div>
                      );
-                  } else if (obj.statusRecycle && !obj.statusComplete) {
+                  } else if (obj.statusRetrieve && !obj.statusDone) {
                      return (
                         <div className="toDo">
                            <div className="left tick">
@@ -128,11 +141,11 @@ function App() {
                                  e.target.value = true;
                                  setToDos(toDos.filter((obj2) => {
                                     if (obj2.id === obj.id) {
-                                       obj2.statusComplete = e.target.value;
+                                       obj2.statusDone = e.target.value;
                                     }
                                     return obj2;
                                  }));
-                              }} value={obj.statusComplete} className="fas fa-check"></i>
+                              }} value={obj.statusDone} className="fas fa-check" title="Done"></i>
                            </div>
                            <div className="top">
                               <p>{obj.text}</p>
@@ -143,14 +156,14 @@ function App() {
                            <div className="right close">
                               <i onClick={(e) => {
                                  e.target.value = true;
-                                 setToDos(toDos.filter((obj3) => {
-                                    if (obj3.id === obj.id) {
-                                       obj3.statusDelete = e.target.value;
-                                       obj.statusRecycle = !e.target.value;
+                                 setToDos(toDos.filter((obj2) => {
+                                    if (obj2.id === obj.id) {
+                                       obj2.statusDrop = e.target.value;
+                                       obj.statusRetrieve = !e.target.value;
                                     }
-                                    return obj3;
+                                    return obj2;
                                  }));
-                              }} value={obj.statusDelete} className="fas fa-times"></i>
+                              }} value={obj.statusDrop} className="fas fa-times" title="Drop"></i>
                            </div>
                         </div>
                      );
@@ -159,42 +172,46 @@ function App() {
             }
          </div>
 
-         <div className="container deleted">
+         <div className="container dropped">
             <h3>Dropped</h3>
             {
                toDos.map((obj) => {
-                  if (obj.statusDelete && !obj.statusRecycle && !obj.statusBin) {
+                  if (obj.statusDrop && !obj.statusRetrieve && !obj.statusRemove) {
                      return (
                         <div className="toDo">
-                           <div className="leftEnd"></div>
-                           <div className="left"></div>
+                           <div className="left recycle">
+                              <i onClick={(e) => {
+                                 let isdelete = window.confirm("Retrieving dropped ToDo");
+                                 if (isdelete) {
+                                    e.target.value = true;
+                                 }
+                                 setToDos(toDos.filter((obj2) => {
+                                    if (obj2.id === obj.id) {
+                                       obj2.statusRetrieve = e.target.value;
+                                    }
+                                    return obj2;
+                                 }));
+                              }} value={obj.statusRetrieve} className="fas fa-redo-alt" title="Retrieve"></i>
+                           </div>
                            <div className="top">
                               <p className="textCross">{obj.text}</p>
                            </div>
                            <div className="bottom">
                               <p>{obj.toDoTime}</p>
                            </div>
-                           <div className="right recycle">
+                           <div className="right bin">
                               <i onClick={(e) => {
-                                 e.target.value = true;
-                                 setToDos(toDos.filter((obj4) => {
-                                    if (obj4.id === obj.id) {
-                                       obj4.statusRecycle = e.target.value;
+                                 let isdelete = window.confirm("Deleting ToDo permanently !");
+                                 if (isdelete) {
+                                    e.target.value = true;
+                                 }
+                                 setToDos(toDos.filter((obj2) => {
+                                    if (obj2.id === obj.id) {
+                                       obj2.statusRemove = e.target.value;
                                     }
-                                    return obj4;
+                                    return obj2;
                                  }));
-                              }} value={obj.statusRecycle} className="fas fa-redo-alt"></i>
-                           </div>
-                           <div className="rightEnd bin">
-                              <i onClick={(e) => {
-                                 e.target.value = true;
-                                 setToDos(toDos.filter((obj6) => {
-                                    if (obj6.id === obj.id) {
-                                       obj6.statusBin = e.target.value;
-                                    }
-                                    return obj6;
-                                 }));
-                              }} value={obj.statusBin} className="fas fa-trash-alt"></i>
+                              }} value={obj.statusRemove} className="fas fa-trash-alt" title="Remove"></i>
                            </div>
                         </div>
                      );

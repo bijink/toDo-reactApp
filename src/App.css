@@ -8,7 +8,7 @@ body {
 }
 
 .gradient-text {
-   background-image: linear-gradient(10deg, rgb(0, 255, 110), rgb(255, 183, 0), rgb(255, 0, 0));
+   background-image: linear-gradient(80deg, rgb(90, 255, 162), rgb(255, 63, 63));
    background-clip: text;
    -webkit-text-fill-color: transparent;
 }
@@ -29,9 +29,9 @@ i {
    cursor: pointer;
 }
 
-.toDoInput .right i {
+.toDoInput i {
    font-size: large;
-   color: rgb(0, 0, 0);
+   color: rgb(84, 84, 84);
 }
 
 .container i {
@@ -52,7 +52,7 @@ i {
 }
 
 .container .toDo .recycle i {
-   color: royalblue;
+   color: rgb(46, 75, 164);
 }
 
 /* ** Headings ** */
@@ -79,7 +79,7 @@ i {
    margin-top: 1rem;
    border-radius: .25rem;
    display: grid;
-   grid-template-columns: 90% 10%;
+   grid-template-columns: 84% 8% 8%;
 }
 
 .toDoInput .left input {
@@ -97,6 +97,12 @@ i {
 }
 
 .toDoInput .right {
+   display: flex;
+   justify-content: center;
+   align-items: center;
+}
+
+.toDoInput .rightEnd {
    display: flex;
    justify-content: center;
    align-items: center;
@@ -149,30 +155,29 @@ i {
 
 /* ** Container Completed ** */
 
-.container.completed {
+.container.done {
    background-color: seagreen;
    box-shadow: 0 0 2px 2px seagreen;
 }
 
-.container.completed .toDo {
+.container.done .toDo {
    display: grid;
    grid-template-columns: auto auto auto;
    grid-template-rows: auto auto;
 }
 
-.container.completed .toDo .top {
+.container.done .toDo .top {
    width: 25.5vw;
 }
 
-.container.completed .toDo .left {
+.container.done .toDo .left {
    grid-column-start: 1;
    grid-column-end: 2;
    grid-row-start: 1;
    grid-row-end: 3;
 }
 
-
-.container.completed .toDo .right {
+.container.done .toDo .right {
    grid-column-start: 3;
    grid-column-end: 4;
    grid-row-start: 1;
@@ -181,104 +186,113 @@ i {
 
 /* ** Container Progressing ** */
 
-.container.progressing {
+.container.onGoing {
    background-color: darkgoldenrod;
    box-shadow: 0 0 2px 2px darkgoldenrod;
 }
 
-.container.progressing .toDo {
+.container.onGoing .toDo {
    display: grid;
    grid-template-columns: auto auto auto;
    grid-template-rows: auto auto;
 }
 
-.container.progressing .toDo .top {
+.container.onGoing .toDo .top {
    width: 24vw;
 }
 
-.container.progressing .toDo .left {
+.container.onGoing .toDo .left {
    grid-column-start: 1;
    grid-column-end: 2;
    grid-row-start: 1;
    grid-row-end: 3;
 }
 
-.container.progressing .toDo .right {
+.container.onGoing .toDo .right {
    grid-column-start: 3;
    grid-column-end: 4;
    grid-row-start: 1;
    grid-row-end: 3;
 }
 
-/* ** Container Deleted ** */
+/* ** Container Dropped ** */
 
-.container.deleted {
+.container.dropped {
    background-color: brown;
    box-shadow: 0 0 2px 2px brown;
 }
 
-.container.deleted .toDo {
+.container.dropped .toDo {
    display: grid;
-   grid-template-columns: auto auto auto auto auto;
+   grid-template-columns: auto auto auto;
    grid-template-rows: auto auto;
 }
 
-.container.deleted .toDo .top {
+.container.dropped .toDo .top {
    width: 23.5vw;
 }
-.container.deleted .toDo .leftEnd {
+
+.container.dropped .toDo .left {
    grid-column-start: 1;
    grid-column-end: 2;
    grid-row-start: 1;
    grid-row-end: 3;
 }
 
-.container.deleted .toDo .left {
-   grid-column-start: 2;
-   grid-column-end: 3;
+.container.dropped .toDo .right {
+   grid-column-start: 3;
+   grid-column-end: 4;
    grid-row-start: 1;
    grid-row-end: 3;
 }
 
-.container.deleted .toDo .right {
-   grid-column-start: 4;
-   grid-column-end: 5;
-   grid-row-start: 1;
-   grid-row-end: 3;
-}
+/* ** media queries for setting width of 'toDo' between 950px and 430px display ** */
 
-.container.deleted .toDo .rightEnd {
-   grid-column-start: 5;
-   grid-column-end: 6;
-   grid-row-start: 1;
-   grid-row-end: 3;
-   padding-left: .5vw;
-}
-
-/* ** media queries for setting width of 'toDo' below 950px display ** */
-
-@media only screen and (max-width:950px) {
-   .container.completed .toDo .top {
+@media only screen and (max-width:950px) and (min-width:430px) {
+   .container.done .toDo .top {
       width: 23vw;
    }
-   .container.progressing .toDo .top {
+   .container.onGoing .toDo .top {
       width: 18.5vw;
       margin-left: 1vw;
    }
-   .container.progressing .toDo .bottom {
+   .container.onGoing .toDo .bottom {
       width: 18.5vw;
       margin-left: 1vw;
    }
-   .container.deleted .toDo .top {
+   .container.dropped .toDo .top {
       width: 19vw;
+      margin-left: 1vw;
    }
-   .container.deleted .toDo .rightEnd {
-      padding-left: 1vw;
+   .container.dropped .toDo .bottom {
+      margin-left: 1vw;
    }
 }
+
+/* ** media queries for setting width of 'toDoInput' below 800px display ** */
 
 @media only screen and (max-width:800px) {
    .toDoInput {
       width: 95%;
+   }
+}
+
+/* ** media queries for setting width of 'container, toDo' below 430px display ** */
+
+@media only screen and (max-width:430px) {
+   .container {
+      width: 94.82%;
+   }
+   .toDoInput .left input {
+      width: 92%;
+   }
+   .container.done .toDo .top {
+      width: 80vw;
+   }
+   .container.onGoing .toDo .top {
+      width: 70vw;
+   }
+   .container.dropped .toDo .top {
+      width: 70vw;
    }
 }
