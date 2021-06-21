@@ -24,7 +24,7 @@ function App() {
    const toDoTime = hour12() + ':' + currDate.getMinutes() + ':' + currDate.getSeconds() + ' ' + AMorPM;
    const toDoDate = currDate.getDate() + '.' + currDate.getMonth() + '.' + currDate.getFullYear();
    const toDoDay = dayNamesShort[currDate.getDay()];
-   const toDoTimeDateDay = toDoTime + ' ' + toDoDate + ' ' + toDoDay;
+   const toDoTimeDateDay = toDoTime + ' ' + toDoDay + ' ' + toDoDate;
 
    const handleUserInput = (e) => {
       setToDo(e.target.value);
@@ -49,7 +49,7 @@ function App() {
             <div className="left">
                <input value={toDo} onChange={handleUserInput} type="text" placeholder=" Plan Something . . ." />
             </div>
-            <div className="right">
+            <div className="right erase">
                <i onClick={resetInputField} className="fas fa-eraser" title="Clear"></i>
             </div>
             <div className="rightEnd  add">
@@ -95,7 +95,7 @@ function App() {
                })
             }
          </div>
-
+         
          <div className="container onGoing">
             <h3>On Going</h3>
             {
