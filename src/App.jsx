@@ -22,7 +22,7 @@ function App() {
       return hour;
    };
    const toDoTime = hour12() + ':' + currDate.getMinutes() + ':' + currDate.getSeconds() + ' ' + AMorPM;
-   const toDoDate = currDate.getDate() + '.' + currDate.getMonth() + '.' + currDate.getFullYear();
+   const toDoDate = currDate.getDate() + '.' + (currDate.getMonth() + 1) + '.' + currDate.getFullYear();
    const toDoDay = dayNamesShort[currDate.getDay()];
    const toDoTimeDateDay = toDoTime + ' ' + toDoDay + ' ' + toDoDate;
 
@@ -95,7 +95,7 @@ function App() {
                })
             }
          </div>
-         
+
          <div className="container onGoing">
             <h3>On Going</h3>
             {
