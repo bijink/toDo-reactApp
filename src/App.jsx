@@ -67,7 +67,7 @@ function App() {
                toDos.map((obj) => {
                   if (obj.statusDone && !obj.statusRemove) {
                      return (
-                        <div className="toDo">
+                        <div key={obj.id} className="toDo">
                            <div className="left"></div>
                            <div className="top">
                               <p className="textCross">{obj.text}</p>
@@ -102,7 +102,7 @@ function App() {
                toDos.map((obj) => {
                   if (!obj.statusDone && !obj.statusDrop) {
                      return (
-                        <div className="toDo">
+                        <div key={obj.id} className="toDo">
                            <div className="left tick">
                               <i onClick={(e) => {
                                  e.target.value = true;
@@ -135,7 +135,7 @@ function App() {
                      );
                   } else if (obj.statusRetrieve && !obj.statusDone) {
                      return (
-                        <div className="toDo">
+                        <div key={obj.id} className="toDo">
                            <div className="left tick">
                               <i onClick={(e) => {
                                  e.target.value = true;
@@ -178,7 +178,7 @@ function App() {
                toDos.map((obj) => {
                   if (obj.statusDrop && !obj.statusRetrieve && !obj.statusRemove) {
                      return (
-                        <div className="toDo">
+                        <div key={obj.id} className="toDo">
                            <div className="left recycle">
                               <i onClick={(e) => {
                                  let isdelete = window.confirm("Retrieving dropped ToDo");
