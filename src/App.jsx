@@ -1,10 +1,18 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './App.css';
 
 function App() {
 
-   const [toDos, setToDos] = useState([]);
    const [toDo, setToDo] = useState('');
+   const [toDos, setToDos] = useState(() => {
+      // getting stored value
+      const saved = localStorage.getItem("Storage");
+      const initialValue = JSON.parse(saved);
+      // console.log(initialValue);
+
+      return initialValue || "";
+   });
+
 
    const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
    const date = new Date();
@@ -15,7 +23,7 @@ function App() {
    const hours = currDate.getHours();
    const AMorPM = hours >= 12 ? 'PM' : 'AM';
    var hour = hours % 12;
-   var hour12 = () => {
+   const hour12 = () => {
       if (hour === 0) {
          hour = 12;
       }
@@ -29,9 +37,30 @@ function App() {
    const handleUserInput = (e) => {
       setToDo(e.target.value);
    };
+   const handleInputSubmit = (e) => {
+      e.preventDefault();
+      if (toDo) {
+         setToDos([...toDos, {
+            id: Date.now(),
+            text: toDo,
+            toDoTime: toDoTimeDateDay,
+            statusErase: false,
+            statusDone: false,
+            statusDrop: false,
+            statusRetrieve: false,
+            statusRemove: false
+         }]);
+         // setToDo('');
+      }
+   };
    const resetInputField = () => {
       setToDo('');
    };
+
+   useEffect(() => {
+      // storing input name
+      localStorage.setItem("Storage", JSON.stringify(toDos));
+   }, [toDos]);
 
    return (
       <div className="app">
@@ -45,25 +74,23 @@ function App() {
             </div>
          </div>
 
-         <div className="toDoInput">
-            <div className="left">
-               <input value={toDo} onChange={handleUserInput} type="text" placeholder=" Plan Something . . ." />
+         <form onSubmit={handleInputSubmit}>
+            <div className="toDoInput">
+               <div className="left">
+                  <input value={toDo} onChange={handleUserInput} type="text" placeholder=" Plan Something . . ." />
+               </div>
+               <div className="right erase">
+                  <i onClick={resetInputField} className="fas fa-eraser" title="Clear"></i>
+               </div>
+               <div className="rightEnd  add">
+                  <button style={{ border: 'none', outline: 'none', backgroundColor: '#fff' }} type="submit"><i className="fas fa-plus" title="Add"></i></button>
+               </div>
             </div>
-            <div className="right erase">
-               <i onClick={resetInputField} className="fas fa-eraser" title="Clear"></i>
-            </div>
-            <div className="rightEnd  add">
-               <i onClick={() => {
-                  if (toDo) {
-                     setToDos([...toDos, { id: Date.now(), text: toDo, toDoTime: toDoTimeDateDay, statusErase: false, statusDone: false, statusDrop: false, statusRetrieve: false, statusRemove: false }]);
-                  }
-               }} className="fas fa-plus" title="Add"></i>
-            </div>
-         </div>
+         </form>
 
          <div className="container done">
             <h3>Done</h3>
-            {
+            {toDos &&
                toDos.map((obj) => {
                   if (obj.statusDone && !obj.statusRemove) {
                      return (
@@ -98,7 +125,7 @@ function App() {
 
          <div className="container onGoing">
             <h3>On Going</h3>
-            {
+            {toDos &&
                toDos.map((obj) => {
                   if (!obj.statusDone && !obj.statusDrop) {
                      return (
@@ -174,7 +201,7 @@ function App() {
 
          <div className="container dropped">
             <h3>Dropped</h3>
-            {
+            {toDos &&
                toDos.map((obj) => {
                   if (obj.statusDrop && !obj.statusRetrieve && !obj.statusRemove) {
                      return (
