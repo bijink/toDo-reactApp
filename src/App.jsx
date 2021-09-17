@@ -5,31 +5,17 @@ function App() {
 
    const [toDo, setToDo] = useState('');
    const [toDos, setToDos] = useState(() => {
-      // getting stored value
+      // getting stored toDos data from localStorage
       const saved = localStorage.getItem("Storage");
       const initialValue = JSON.parse(saved);
-      // console.log(initialValue);
-
-      // let index = initialValue.findIndex(x => x.statusRemove === true);
-      // console.log(index);
-      // console.log(initialValue);
-
-
       return (initialValue || "");
    });
-   // console.log(toDos.length);
-   // for (let i = 0; i < toDos.length; i++) {
-   // const element = array[i];
-   // console.log(toDos[i]===(toDos[i].statusRemove==true));
 
+   //Program to removing correspondend toDos data from localStorage of browser
+   const index = toDos && toDos.findIndex(obj => obj.statusRemove == true);
+   // console.log(index);
+   if (index > -1) toDos && toDos.splice((index), 1);
 
-   // }
-
-   var index = toDos.findIndex(obj => obj.statusRemove == true);
-   console.log(index);
-   
-   if (index > -1)
-      toDos.splice((index), 1);
 
    const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
    const date = new Date();
@@ -41,19 +27,18 @@ function App() {
    const AMorPM = hours >= 12 ? 'PM' : 'AM';
    var hour = hours % 12;
    const hour12 = () => {
-      if (hour === 0) {
-         hour = 12;
-      }
+      if (hour === 0) hour = 12;
       return hour;
    };
-   const toDoTime = hour12() + ':' + currDate.getMinutes() + ':' + currDate.getSeconds() + ' ' + AMorPM;
    const toDoDate = currDate.getDate() + '.' + (currDate.getMonth() + 1) + '.' + currDate.getFullYear();
    const toDoDay = dayNamesShort[currDate.getDay()];
+   const toDoTime = hour12() + ':' + currDate.getMinutes() + ':' + currDate.getSeconds() + ' ' + AMorPM;
    const toDoTimeDateDay = toDoTime + ' ' + toDoDay + ' ' + toDoDate;
 
    const handleUserInput = (e) => {
       setToDo(e.target.value);
    };
+
    const handleInputSubmit = (e) => {
       e.preventDefault();
       if (toDo) {
@@ -67,7 +52,7 @@ function App() {
             statusRetrieve: false,
             statusRemove: false
          }]);
-         // setToDo('');
+         setToDo('');
       }
    };
    const resetInputField = () => {
@@ -75,25 +60,9 @@ function App() {
    };
 
    useEffect(() => {
-      // storing input name
+      // storing toDos data to localStorage of browser
       localStorage.setItem("Storage", JSON.stringify(toDos));
-
-
-      // console.log();
-      // gfg_Run();
-
    }, [toDos]);
-
-
-
-   // function gfg_Run() {
-   //    var pos = toDos.map((e) => {
-   //       if (e.statusRemove === true)
-   //          return e;
-   //    })
-   //    .indexOf(true);
-   //    console.log(pos);
-   // }
 
    return (
       <div className="app">
@@ -123,8 +92,8 @@ function App() {
 
          <div className="container done">
             <h3>Done</h3>
-            {toDos &&
-               toDos.map((obj) => {
+            {
+               toDos && toDos.map((obj) => {
                   if (obj.statusDone && !obj.statusRemove) {
                      return (
                         <div key={obj.id} className="toDo">
@@ -137,7 +106,6 @@ function App() {
                            </div>
                            <div className="right bin">
                               <i onClick={(e) => {
-
                                  let isdelete = window.confirm("Deleting ToDo permanently !");
                                  if (isdelete) {
                                     e.target.value = true;
@@ -148,8 +116,6 @@ function App() {
                                     }
                                     return obj2;
                                  }));
-
-
                               }} value={obj.statusRemove} className="fas fa-trash-alt" title="Remove"></i>
                            </div>
                         </div>
@@ -161,8 +127,8 @@ function App() {
 
          <div className="container onGoing">
             <h3>On Going</h3>
-            {toDos &&
-               toDos.map((obj) => {
+            {
+               toDos && toDos.map((obj) => {
                   if (!obj.statusDone && !obj.statusDrop) {
                      return (
                         <div key={obj.id} className="toDo">
@@ -238,8 +204,8 @@ function App() {
 
          <div className="container dropped">
             <h3>Dropped</h3>
-            {toDos &&
-               toDos.map((obj) => {
+            {
+               toDos && toDos.map((obj) => {
                   if (obj.statusDrop && !obj.statusRetrieve && !obj.statusRemove) {
                      return (
                         <div key={obj.id} className="toDo">
