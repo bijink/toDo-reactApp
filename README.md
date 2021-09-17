@@ -1,6 +1,6 @@
 # Hosted link
 
-https://bijink.github.io/todo-app
+https://bijink.github.io/toDo-reactApp
 
 # Getting Started with Create React App
 
