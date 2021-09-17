@@ -10,9 +10,26 @@ function App() {
       const initialValue = JSON.parse(saved);
       // console.log(initialValue);
 
-      return initialValue || "";
-   });
+      // let index = initialValue.findIndex(x => x.statusRemove === true);
+      // console.log(index);
+      // console.log(initialValue);
 
+
+      return (initialValue || "");
+   });
+   // console.log(toDos.length);
+   // for (let i = 0; i < toDos.length; i++) {
+   // const element = array[i];
+   // console.log(toDos[i]===(toDos[i].statusRemove==true));
+
+
+   // }
+
+   var index = toDos.findIndex(obj => obj.statusRemove == true);
+   console.log(index);
+   
+   if (index > -1)
+      toDos.splice((index), 1);
 
    const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
    const date = new Date();
@@ -60,7 +77,23 @@ function App() {
    useEffect(() => {
       // storing input name
       localStorage.setItem("Storage", JSON.stringify(toDos));
+
+
+      // console.log();
+      // gfg_Run();
+
    }, [toDos]);
+
+
+
+   // function gfg_Run() {
+   //    var pos = toDos.map((e) => {
+   //       if (e.statusRemove === true)
+   //          return e;
+   //    })
+   //    .indexOf(true);
+   //    console.log(pos);
+   // }
 
    return (
       <div className="app">
@@ -104,6 +137,7 @@ function App() {
                            </div>
                            <div className="right bin">
                               <i onClick={(e) => {
+
                                  let isdelete = window.confirm("Deleting ToDo permanently !");
                                  if (isdelete) {
                                     e.target.value = true;
@@ -114,6 +148,8 @@ function App() {
                                     }
                                     return obj2;
                                  }));
+
+
                               }} value={obj.statusRemove} className="fas fa-trash-alt" title="Remove"></i>
                            </div>
                         </div>
@@ -182,6 +218,7 @@ function App() {
                            </div>
                            <div className="right close">
                               <i onClick={(e) => {
+
                                  e.target.value = true;
                                  setToDos(toDos.filter((obj2) => {
                                     if (obj2.id === obj.id) {
