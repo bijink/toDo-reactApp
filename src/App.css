@@ -36,7 +36,7 @@ i {
 
 .container i {
    font-size: larger;
-   margin-top: .16rem;
+   margin-top: 0.16rem;
 }
 
 .container .toDo .bin i {
@@ -57,13 +57,13 @@ i {
 
 /* ** Headings ** */
 
-.mainHeading {
+.headings .mainHeading {
    text-align: center;
    margin-top: 2rem;
    color: white;
 }
 
-.subHeading {
+.headings .subHeading {
    text-align: center;
    color: white;
 }
@@ -77,7 +77,7 @@ i {
    box-shadow: 0 0 2px 1px rgb(255, 255, 255);
    margin: auto;
    margin-top: 1rem;
-   border-radius: .25rem;
+   border-radius: 0.25rem;
    display: grid;
    grid-template-columns: 84% 8% 8%;
 }
@@ -85,12 +85,12 @@ i {
 .toDoInput .left input {
    width: 98%;
    height: 90%;
-   margin-top: .8%;
+   margin-top: 0.8%;
    margin-left: 1%;
    border: unset;
-   border-radius: .25rem;
+   border-radius: 0.25rem;
    outline: none;
-   padding-left: .3rem;
+   padding-left: 0.3rem;
    font-size: x-large;
    font-family: inherit;
    font-weight: bold;
@@ -118,7 +118,7 @@ i {
    margin-left: 2.5%;
    padding-top: 1rem;
    padding-bottom: 1rem;
-   border-radius: .25rem;
+   border-radius: 0.25rem;
    display: flex;
    justify-content: center;
    align-items: center;
@@ -129,9 +129,9 @@ i {
    width: 92%;
    height: 100%;
    background-color: rgb(241, 241, 241, 0.2);
-   margin-top: .5rem;
+   margin-top: 0.5rem;
    padding: 5px;
-   border-radius: .25rem;
+   border-radius: 0.25rem;
    transition: width 200ms;
 }
 
@@ -248,7 +248,7 @@ i {
 
 /* ** media queries for setting width of 'toDo' between 950px and 430px display ** */
 
-@media only screen and (max-width:950px) and (min-width:430px) {
+@media only screen and (max-width: 950px) and (min-width: 430px) {
    .container.done .toDo .top {
       width: 23vw;
    }
@@ -271,7 +271,7 @@ i {
 
 /* ** media queries for setting width of 'toDoInput' below 800px display ** */
 
-@media only screen and (max-width:800px) {
+@media only screen and (max-width: 800px) {
    .toDoInput {
       width: 95%;
    }
@@ -279,7 +279,7 @@ i {
 
 /* ** media queries for setting width of 'container, toDo' below 430px display ** */
 
-@media only screen and (max-width:430px) {
+@media only screen and (max-width: 430px) {
    .container {
       width: 94.82%;
    }

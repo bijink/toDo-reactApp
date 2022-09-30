@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import './App.css';
 
 function App() {
-
    const [toDo, setToDo] = useState('');
    const [toDos, setToDos] = useState(() => {
       // getting stored toDos data from localStorage
@@ -17,6 +16,7 @@ function App() {
    if (index > -1) toDos && toDos.splice((index), 1);
 
 
+   //Day,Date,Time getting codes
    const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
    const date = new Date();
    const day = dayNames[date.getDay()];
@@ -35,10 +35,10 @@ function App() {
    const toDoTime = hour12() + ':' + currDate.getMinutes() + ':' + currDate.getSeconds() + ' ' + AMorPM;
    const toDoTimeDateDay = toDoTime + ' ' + toDoDay + ' ' + toDoDate;
 
+
    const handleUserInput = (e) => {
       setToDo(e.target.value);
    };
-
    const handleInputSubmit = (e) => {
       e.preventDefault();
       if (toDo) {
@@ -46,7 +46,7 @@ function App() {
             id: Date.now(),
             text: toDo,
             toDoTime: toDoTimeDateDay,
-            statusErase: false,
+            // statusErase: false,
             statusDone: false,
             statusDrop: false,
             statusRetrieve: false,
@@ -252,7 +252,6 @@ function App() {
 
       </div>
    );
-
 }
 
 export default App;
