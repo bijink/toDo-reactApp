@@ -10,24 +10,47 @@ function App() {
       return initialValue || [];
    });
 
-   // #day, date, time getting codes
-   const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-   const date = new Date();
-   const day = dayNames[date.getDay()];
+   // #to get current time in '12hour' format
+   const getTime = () => {
+      const currDate = new Date();
 
-   const dayNamesShort = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-   const currDate = new Date();
-   const hours = currDate.getHours();
-   const AMorPM = hours >= 12 ? "PM" : "AM";
-   var hour = hours % 12;
-   const hour12 = () => {
-      if (hour === 0) hour = 12;
-      return hour;
+      const hour = currDate.getHours();
+      const minute = currDate.getMinutes();
+      const AMorPM = hour >= 12 ? "PM" : "AM";
+      // #convert 24hour into 12hour
+      let hour_12 = hour % 12;
+      if (hour_12 === 0) hour_12 = 12;
+      // #convert hour numbers less than 10 into 2 digit number (eg: 5 ==> 05)
+      let minute_00 = minute.toString();
+      if (minute < 10) minute_00 = `0${minute}`;
+
+      return `${hour_12}:${minute_00} ${AMorPM}`;
    };
-   const toDoDate = currDate.getDate() + "." + (currDate.getMonth() + 1) + "." + currDate.getFullYear();
-   const toDoDay = dayNamesShort[currDate.getDay()];
-   const toDoTime = hour12() + ":" + currDate.getMinutes() + ":" + currDate.getSeconds() + " " + AMorPM;
-   const toDoTimeDateDay = toDoTime + " " + toDoDay + " " + toDoDate;
+
+   // #to get current 'day' of the week
+   const getDay = () => {
+      const currDate = new Date();
+      // #get current day in full letters
+      const dayNames_full = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+      const day_full = dayNames_full[currDate.getDay()];
+      // #get current day in short letters
+      const dayNames_short = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+      const day_short = dayNames_short[currDate.getDay()];
+
+      return {
+         full: day_full,
+         short: day_short,
+      };
+   };
+
+   // #to get current date in 'MMM DD, YYYY' format
+   const getDate = () => {
+      const currDate = new Date();
+      // #to split into month, dayNum, year array
+      const dateSplit = currDate.toString().slice(4, 15).split(" ");
+
+      return `${dateSplit[0]} ${dateSplit[1]}, ${dateSplit[2]}`;
+   };
 
    const handleUserInput = (e) => {
       setToDo(e.target.value);
@@ -41,8 +64,12 @@ function App() {
             {
                id: Date.now(),
                text: toDo,
-               time: toDoTimeDateDay,
                status: "onGo", // #valid values are <'done' | 'onGo' | 'drop' | 'remove'>
+               moment: {
+                  time: getTime(),
+                  day: getDay()?.short,
+                  date: getDate(),
+               },
             },
          ]);
          setToDo("");
@@ -70,7 +97,6 @@ function App() {
          const index = toDos.findIndex((obj) => obj.status === "remove");
          if (index > -1) toDos.splice(index, 1);
       }
-
       // #storing toDos data to localStorage of browser
       localStorage.setItem("todo_list_data", JSON.stringify(toDos));
    }, [toDos]);
@@ -84,7 +110,7 @@ function App() {
             </div>
             <div className="subHeading">
                <h2 className="">
-                  Hey, it's <span className="gradient-text2">{day}</span>
+                  Hey, it's <span className="gradient-text2">{getDay()?.full}</span>
                </h2>
             </div>
          </div>
@@ -120,7 +146,8 @@ function App() {
                               <p className="textCross">{todo.text}</p>
                            </div>
                            <div className="bottom">
-                              <p>{todo.time}</p>
+                              <p>{`${todo.moment.time} ${todo.moment.day}`}</p>
+                              <p>{`${todo.moment.date}`}</p>
                            </div>
                            <div className="right bin">
                               <i
@@ -156,7 +183,8 @@ function App() {
                               <p>{todo.text}</p>
                            </div>
                            <div className="bottom">
-                              <p>{todo.time}</p>
+                              <p>{`${todo.moment.time} ${todo.moment.day}`}</p>
+                              <p>{`${todo.moment.date}`}</p>
                            </div>
                            <div className="right close">
                               <i
@@ -192,7 +220,8 @@ function App() {
                               <p className="textCross">{todo.text}</p>
                            </div>
                            <div className="bottom">
-                              <p>{todo.time}</p>
+                              <p>{`${todo.moment.time} ${todo.moment.day}`}</p>
+                              <p>{`${todo.moment.date}`}</p>
                            </div>
                            <div className="right bin">
                               <i

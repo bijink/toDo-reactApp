@@ -168,6 +168,10 @@ i {
    font-family: "Architects Daughter", cursive;
 }
 
+.container .toDo .bottom {
+   display: flex;
+   justify-content: space-between;
+}
 .container .toDo .bottom p {
    font-size: 0.9rem;
    cursor: default;
