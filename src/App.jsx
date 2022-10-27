@@ -83,7 +83,9 @@ function App() {
                <h1 className="gradient-text">ToDo List</h1>
             </div>
             <div className="subHeading">
-               <h2 className="gradient-text2">Hey, it's {day}</h2>
+               <h2 className="">
+                  Hey, it's <span className="gradient-text2">{day}</span>
+               </h2>
             </div>
          </div>
          {/* input section */}
@@ -107,7 +109,7 @@ function App() {
 
          {/* container done */}
          <div className="container done">
-            <h3>Done</h3>
+            <h3 className="heading">Done</h3>
             {toDos &&
                toDos.map((todo) => {
                   if (todo.status === "done") {
@@ -137,7 +139,7 @@ function App() {
          </div>
          {/* container onGoing */}
          <div className="container onGoing">
-            <h3>On Going</h3>
+            <h3 className="heading">On Going</h3>
             {toDos &&
                toDos.map((todo) => {
                   if (todo.status === "onGo") {
@@ -170,7 +172,7 @@ function App() {
          </div>
          {/* container dropped */}
          <div className="container dropped">
-            <h3>Dropped</h3>
+            <h3 className="heading">Dropped</h3>
             {toDos &&
                toDos.map((todo) => {
                   if (todo.status === "drop") {
