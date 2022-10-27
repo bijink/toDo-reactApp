@@ -106,7 +106,7 @@ function App() {
          {/* heading section */}
          <div className="headings">
             <div className="mainHeading">
-               <h1 className="gradient-text">ToDo List</h1>
+               <h1 className="gradient-text1">ToDo List</h1>
             </div>
             <div className="subHeading">
                <h2 className="">
@@ -115,19 +115,25 @@ function App() {
             </div>
          </div>
          {/* input section */}
-         <form onSubmit={handleInputSubmit}>
-            <div className="toDoInput">
-               <div className="left">
-                  <input value={toDo} onChange={handleUserInput} type="text" placeholder=" Plan Something . . ." />
-               </div>
-               <div className="right erase">
+         <form className="inputForm" onSubmit={handleInputSubmit}>
+            <div className="input">
+               <textarea
+                  id="todo-textarea"
+                  name="todo-textarea"
+                  rows="3"
+                  cols="50"
+                  value={toDo}
+                  onChange={handleUserInput}
+                  placeholder="Plan Something . . ."
+               />
+            </div>
+            <div className="input-btns">
+               <button className="add-btn" type="submit">
+                  <i className="fas fa-plus" title="Add"></i>
+               </button>
+               <button className="erase-btn">
                   <i onClick={resetInputField} className="fas fa-eraser" title="Clear"></i>
-               </div>
-               <div className="rightEnd  add">
-                  <button style={{ border: "none", outline: "none", backgroundColor: "#fff" }} type="submit">
-                     <i className="fas fa-plus" title="Add"></i>
-                  </button>
-               </div>
+               </button>
             </div>
          </form>
 

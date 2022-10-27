@@ -8,7 +8,7 @@ body {
    color: white;
 }
 
-.gradient-text {
+.gradient-text1 {
    background-image: linear-gradient(90deg, rgb(80, 170, 120), rgb(201, 150, 40), rgb(190, 80, 80));
    background-clip: text;
    -webkit-text-fill-color: transparent;
@@ -85,41 +85,48 @@ i {
 
 /* ** ToDO Input ** */
 
-.toDoInput {
+.inputForm {
    width: 30%;
-   height: 3.5rem;
    background-color: rgb(255, 255, 255);
    box-shadow: 0 0 2px 1px rgb(255, 255, 255);
    margin: auto;
    margin-top: 1rem;
    border-radius: 0.25rem;
-   display: grid;
-   grid-template-columns: 84% 8% 8%;
+   padding: 2px 0;
+   display: flex;
 }
-
-.toDoInput .left input {
-   width: 98%;
-   height: 90%;
-   margin-top: 0.8%;
-   margin-left: 1%;
-   border: unset;
-   border-radius: 0.25rem;
-   outline: none;
-   padding-left: 0.3rem;
-   font-size: x-large;
+.inputForm .input {
+   width: 100%;
+   padding: 1px 8px 0 2px;
+}
+.inputForm .input textarea {
+   width: 100%;
    font-family: "Architects Daughter", cursive;
+   resize: vertical;
+   font-size: 1.2rem;
+   line-height: 1.5rem;
+   outline: none;
+   border: none;
+   border-radius: 0.25rem;
+   padding: 2px;
+   padding-left: 3px;
+   min-height: 4.5rem;
+   margin-bottom: -4px;
 }
-
-.toDoInput .right {
+.inputForm .input-btns {
    display: flex;
-   justify-content: center;
-   align-items: center;
+   flex-direction: column;
+   justify-content: flex-start;
+   padding-right: 5px;
 }
-
-.toDoInput .rightEnd {
-   display: flex;
-   justify-content: center;
-   align-items: center;
+.inputForm .input-btns > * {
+   border: none;
+   outline: none;
+   background-color: transparent;
+   margin: 8px 0;
+}
+.inputForm .input-btns > * i {
+   font-size: 1.4rem;
 }
 
 /* ** Container ** */
@@ -128,7 +135,7 @@ i {
    height: 100%;
    width: 30%;
    float: left;
-   margin-top: 2.5%;
+   margin-top: 1.5rem;
    margin-left: 2.5%;
    padding-top: 1rem;
    padding-bottom: 1rem;
@@ -137,6 +144,7 @@ i {
    justify-content: center;
    align-items: center;
    flex-direction: column;
+   margin-bottom: 2rem;
 }
 
 .container .heading {
@@ -166,11 +174,13 @@ i {
    line-height: 1.6rem;
    font-size: 1.2rem;
    font-family: "Architects Daughter", cursive;
+   white-space: pre-wrap;
 }
 
 .container .toDo .bottom {
    display: flex;
    justify-content: space-between;
+   padding-top: 2px;
 }
 .container .toDo .bottom p {
    font-size: 0.9rem;
@@ -298,7 +308,7 @@ i {
 /* ** media queries for setting width of 'toDoInput' below 800px display ** */
 
 @media only screen and (max-width: 800px) {
-   .toDoInput {
+   .inputForm {
       width: 95%;
    }
 }
@@ -308,9 +318,6 @@ i {
 @media only screen and (max-width: 430px) {
    .container {
       width: 94.82%;
-   }
-   .toDoInput .left input {
-      width: 92%;
    }
    .container.done .toDo .top {
       width: 80vw;
