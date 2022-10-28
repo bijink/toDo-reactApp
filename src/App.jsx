@@ -79,6 +79,11 @@ function App() {
       const initialValue = JSON.parse(saved);
       return initialValue || [];
    });
+   // #valid values are <'nav_done' | 'nav_onGo' | 'nav_drop'>
+   const [bottomNavItemID, setBottomNavItemID] = useState("nav_onGo");
+   // #state values for bottomNavBar swipe controls (mobile)
+   const [touchStart, setTouchStart] = useState(0);
+   const [touchEnd, setTouchEnd] = useState(0);
 
    // #to get current time in '12hour' format
    const getTime = () => {
@@ -143,11 +148,16 @@ function App() {
             },
          ]);
          setToDo("");
+         setBottomNavItemID("nav_onGo");
       }
    };
 
    const resetInputField = () => {
       setToDo("");
+   };
+
+   const handleBottomNavControl = (navItemID) => {
+      setBottomNavItemID(navItemID);
    };
 
    useEffect(() => {
@@ -159,6 +169,43 @@ function App() {
       // #storing toDos data to localStorage of browser
       localStorage.setItem("todo_list_data", JSON.stringify(toDos));
    }, [toDos]);
+
+   function handleTouchStart(e) {
+      setTouchStart(e.targetTouches[0].clientX);
+   }
+   function handleTouchMove(e) {
+      setTouchEnd(e.targetTouches[0].clientX);
+   }
+
+   useEffect(() => {
+      // #swipe from right to left ==> touchValue -ve
+      // #swipe from left to right ==> touchValue +ve
+      const touchValue = touchEnd - touchStart;
+      const swipeSensitivity = 150; //#lesser is more sensitivity
+      if (touchEnd !== null) {
+         // console.log(touchStart, touchEnd, touchValue);
+         if (touchValue > swipeSensitivity) {
+            if (bottomNavItemID === "nav_done") {
+               setBottomNavItemID("nav_onGo");
+               setTouchStart(touchEnd);
+            } else if (bottomNavItemID === "nav_onGo") {
+               setBottomNavItemID("nav_drop");
+               setTouchStart(touchEnd);
+            }
+         }
+         if (touchValue < -swipeSensitivity) {
+            if (bottomNavItemID === "nav_drop") {
+               setBottomNavItemID("nav_onGo");
+               setTouchStart(touchEnd);
+            } else if (bottomNavItemID === "nav_onGo") {
+               setBottomNavItemID("nav_done");
+               setTouchStart(touchEnd);
+            }
+         }
+      }
+
+      return () => setTouchEnd(null);
+   }, [touchEnd, touchStart, bottomNavItemID]);
 
    return (
       <div className="app">
@@ -197,34 +244,73 @@ function App() {
          </form>
          {/* list section */}
          {/* list done */}
-         <div className="list done">
+         <div className="list done" style={{ display: bottomNavItemID === "nav_done" && "flex" }}>
             <h3 className="heading">Done</h3>
-            {toDos &&
-               toDos.map((todo) => {
-                  if (todo.status === "done") {
-                     return <TodoContainer key={todo.id} listID={todo.status} todo={todo} setToDos={setToDos} />;
-                  } else return null;
-               })}
+            <div className="toDos">
+               {toDos &&
+                  toDos.map((todo) => {
+                     if (todo.status === "done") {
+                        return (
+                           <TodoContainer key={todo.id} listID={todo.status} todo={todo} setToDos={setToDos} />
+                        );
+                     } else return null;
+                  })}
+            </div>
          </div>
          {/* list onGo */}
-         <div className="list onGo">
+         <div className="list onGo" style={{ display: bottomNavItemID === "nav_onGo" && "flex" }}>
             <h3 className="heading">On Going</h3>
-            {toDos &&
-               toDos.map((todo) => {
-                  if (todo.status === "onGo") {
-                     return <TodoContainer key={todo.id} listID={todo.status} todo={todo} setToDos={setToDos} />;
-                  } else return null;
-               })}
+            <div className="toDos">
+               {toDos &&
+                  toDos.map((todo) => {
+                     if (todo.status === "onGo") {
+                        return (
+                           <TodoContainer key={todo.id} listID={todo.status} todo={todo} setToDos={setToDos} />
+                        );
+                     } else return null;
+                  })}
+            </div>
          </div>
          {/* list drop */}
-         <div className="list drop">
+         <div className="list drop" style={{ display: bottomNavItemID === "nav_drop" && "flex" }}>
             <h3 className="heading">Dropped</h3>
-            {toDos &&
-               toDos.map((todo) => {
-                  if (todo.status === "drop") {
-                     return <TodoContainer key={todo.id} listID={todo.status} todo={todo} setToDos={setToDos} />;
-                  } else return null;
-               })}
+            <div className="toDos">
+               {toDos &&
+                  toDos.map((todo) => {
+                     if (todo.status === "drop") {
+                        return (
+                           <TodoContainer key={todo.id} listID={todo.status} todo={todo} setToDos={setToDos} />
+                        );
+                     } else return null;
+                  })}
+            </div>
+         </div>
+         {/* bottom navBar (mobile) */}
+         <div id="bottom_nav" className="bottomNav" onTouchStart={handleTouchStart} onTouchMove={handleTouchMove}>
+            <div
+               className={`navDone ${bottomNavItemID === "nav_done" && "nav_on"}`}
+               onClick={() => handleBottomNavControl("nav_done")}
+            >
+               <i className="fas fa-chevron-left icon_sm hidden_icon"></i>
+               <i className="fas fa-check icon tick"></i>
+               <i className="fas fa-chevron-right icon_sm arrow"></i>
+            </div>
+            <div
+               className={`navOnGo ${bottomNavItemID === "nav_onGo" && "nav_on"}`}
+               onClick={() => handleBottomNavControl("nav_onGo")}
+            >
+               <i className="fas fa-chevron-left icon_sm arrow"></i>
+               <i className="far fa-clock icon clock"></i>
+               <i className="fas fa-chevron-right icon_sm arrow"></i>
+            </div>
+            <div
+               className={`navDrop ${bottomNavItemID === "nav_drop" && "nav_on"}`}
+               onClick={() => handleBottomNavControl("nav_drop")}
+            >
+               <i className="fas fa-chevron-left icon_sm arrow"></i>
+               <i className="fas fa-times icon close"></i>
+               <i className="fas fa-chevron-right icon_sm hidden_icon"></i>
+            </div>
          </div>
       </div>
    );

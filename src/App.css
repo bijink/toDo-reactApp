@@ -1,11 +1,19 @@
+:root {
+   --color_black: rgb(0, 9, 14);
+   --color_green: seagreen;
+   --color_yellow: darkgoldenrod;
+   --color_red: brown;
+   --primary_borderRadius: 0.25rem;
+}
+
 /* * global styles * */
 * {
    padding: 0;
    margin: 0;
 }
 body {
-   background-color: rgb(0, 9, 14);
-   color: white;
+   background-color: var(--color_black);
+   color: rgb(255, 255, 255);
 }
 .gradient-text1 {
    background-image: linear-gradient(90deg, rgb(80, 170, 120), rgb(201, 150, 40), rgb(190, 80, 80));
@@ -18,37 +26,43 @@ body {
    -webkit-text-fill-color: transparent;
 }
 
-/* * text blur & line-through in list done & drop * */
+/* * text 'blur & line-through' in list done & drop * */
 .text_blurLine {
    text-decoration: line-through;
    filter: blur(1.2px);
-   transition: filter 500ms;
+   transition: filter 400ms;
 }
-.list:hover > .todo .top .text.text_blurLine {
+.list:hover > .toDos .todo .top .text.text_blurLine {
    text-decoration: none;
 }
-.list .todo:hover > .top .text.text_blurLine {
+.list .toDos .todo:hover > .top .text.text_blurLine {
    filter: none;
 }
 
 /* * icon colors * */
 .add {
-   color: black;
+   color: rgb(0, 0, 0);
 }
 .erase {
    color: rgb(50, 50, 50);
 }
 .tick {
-   color: seagreen;
+   color: var(--color_green);
 }
 .close {
-   color: brown;
+   color: var(--color_red);
 }
 .retrieve {
    color: rgb(46, 75, 164);
 }
 .trash {
    color: rgb(69, 69, 69);
+}
+.clock {
+   color: var(--color_yellow);
+}
+.arrow {
+   color: var(--color_black);
 }
 
 /* ** Headings ** */
@@ -62,7 +76,7 @@ body {
 .headings .mainHeading {
    text-align: center;
    margin-top: 2rem;
-   color: white;
+   color: rgb(255, 255, 255);
 }
 .headings .mainHeading h1 {
    font-size: 3rem;
@@ -83,7 +97,7 @@ body {
    box-shadow: 0 0 2px 1px rgb(255, 255, 255);
    margin: auto;
    margin-top: 1rem;
-   border-radius: 0.25rem;
+   border-radius: var(--primary_borderRadius);
    padding: 2px 0;
    display: flex;
 }
@@ -99,7 +113,7 @@ body {
    line-height: 1.5rem;
    outline: none;
    border: none;
-   border-radius: 0.25rem;
+   border-radius: var(--primary_borderRadius);
    padding: 2px;
    padding-left: 3px;
    min-height: 4.5rem;
@@ -125,7 +139,7 @@ body {
    font-size: 1.4rem;
 }
 
-/* ** Lists ** */
+/* ** List container ** */
 .list {
    height: 100%;
    width: 30%;
@@ -133,37 +147,41 @@ body {
    margin: 1.5rem 0;
    margin-left: 2.5%;
    padding: 1rem 0;
-   border-radius: 0.25rem;
+   border-radius: var(--primary_borderRadius);
    display: flex;
    flex-direction: column;
-   justify-content: center;
    align-items: center;
 }
 .list.done {
-   background-color: seagreen;
-   box-shadow: 0 0 2px 2px seagreen;
+   background-color: var(--color_green);
+   box-shadow: 0 0 2px 2px var(--color_green);
 }
 .list.onGo {
-   background-color: darkgoldenrod;
-   box-shadow: 0 0 2px 2px darkgoldenrod;
+   background-color: var(--color_yellow);
+   box-shadow: 0 0 2px 2px var(--color_yellow);
 }
 .list.drop {
-   background-color: brown;
-   box-shadow: 0 0 2px 2px brown;
+   background-color: var(--color_red);
+   box-shadow: 0 0 2px 2px var(--color_red);
 }
 .list .heading {
    color: black;
    font-family: "Architects Daughter", cursive;
    cursor: default;
 }
-.list .todo {
+.list .toDos {
+   width: 100%;
+   display: flex;
+   flex-direction: column-reverse;
+   align-items: center;
+}
+.list .toDos .todo {
    width: 92%;
    height: 100%;
    background-color: rgba(255, 255, 255, 0.18);
-   /* background-color: rgb(255, 255, 255); */
    margin-top: 0.5rem;
    padding: 5px;
-   border-radius: 0.25rem;
+   border-radius: var(--primary_borderRadius);
    display: grid;
    grid-template-columns: auto 1fr auto;
    grid-template-areas:
@@ -171,40 +189,35 @@ body {
       "todo-left todo-bottom todo-right";
    transition: transform 400ms;
 }
-.list .todo:hover {
+.list .toDos .todo:hover {
    background-color: rgba(255, 255, 255, 0.3);
-   transform: scale(1.03);
+   transform: scaleX(1.03);
 }
-.list .todo .left,
-.list .todo .right {
+.list .toDos .todo .left,
+.list .toDos .todo .right {
    width: 25px;
 }
-.list .todo .top,
-.list .todo .bottom {
+.list .toDos .todo .top,
+.list .toDos .todo .bottom {
    padding: 0 2px;
    min-width: 0;
 }
-.list .todo .left {
-   /* background-color: rgba(172, 255, 47, 0.733); */
+.list .toDos .todo .left {
    grid-area: todo-left;
 }
-.list .todo .top {
-   /* background-color: rgba(47, 224, 255, 0.582); */
+.list .toDos .todo .top {
    grid-area: todo-top;
 }
-.list .todo .bottom {
-   /* background-color: rgba(255, 200, 47, 0.753); */
+.list .toDos .todo .bottom {
    grid-area: todo-bottom;
    display: flex;
    justify-content: space-between;
    padding-top: 2px;
 }
-.list .todo .right {
-   /* background-color: rgba(154, 47, 255, 0.473); */
+.list .toDos .todo .right {
    grid-area: todo-right;
 }
-.list .todo > * .icon {
-   /* background-color: rgba(0, 0, 0, 0.384); */
+.list .toDos .todo > * .icon {
    width: inherit;
    height: 25px;
    display: flex;
@@ -214,7 +227,10 @@ body {
    cursor: pointer;
    font-size: 1.2rem;
 }
-.list .todo .top .text {
+.list .toDos .todo .left .icon.retrieve {
+   transform: scale(-1, 1);
+}
+.list .toDos .todo .top .text {
    color: black;
    text-align: justify;
    word-wrap: break-word;
@@ -223,14 +239,51 @@ body {
    font-size: 1.2rem;
    font-family: "Architects Daughter", cursive;
 }
-.list .todo .bottom > * {
+.list .toDos .todo .bottom > * {
    cursor: default;
    color: rgba(0, 0, 0, 0.5);
    font-size: 0.9rem;
    font-family: "Stylish", sans-serif;
 }
 
-/* * media queries for toDoInputForm * */
+/* * Bottom NavBar (mobile) * */
+.bottomNav {
+   display: none;
+   background-color: var(--color_black);
+   width: 100%;
+   height: 3.2rem;
+   box-shadow: 0 0 2px 2px var(--color_black);
+   position: fixed;
+   bottom: 0;
+}
+.bottomNav > * {
+   margin: 6px 5px;
+   width: 100%;
+   display: flex;
+   justify-content: space-evenly;
+   align-items: center;
+   border-radius: 1.5rem;
+}
+.bottomNav > :first-child {
+   margin-left: 20px;
+}
+.bottomNav > :last-child {
+   margin-right: 20px;
+}
+.bottomNav .nav_on {
+   background-color: rgba(255, 255, 255, 0.1);
+}
+.bottomNav > * .icon {
+   font-size: 1.5rem;
+}
+.bottomNav > * .icon_sm {
+   font-size: 0.7rem;
+}
+.bottomNav > * .hidden_icon {
+   color: transparent;
+}
+
+/* * media queries * */
 @media only screen and (max-width: 1080px) {
    .inputForm {
       width: 55%;
@@ -242,14 +295,23 @@ body {
    }
 }
 @media only screen and (max-width: 600px) {
+   /* * mobile * */
+   .text_blurLine {
+      text-decoration: none;
+   }
    .inputForm {
       width: 95%;
    }
-}
-
-/* * media query for containers * */
-@media only screen and (max-width: 600px) {
    .list {
       width: 95%;
+      margin-bottom: 4.5rem;
+   }
+   .list.done,
+   .list.onGo,
+   .list.drop {
+      display: none;
+   }
+   .bottomNav {
+      display: flex;
    }
 }
