@@ -1,6 +1,76 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 
+const TodoContainer = ({ listID, todo, setToDos }) => {
+   const handleToDoStatus = (todoID, status) => {
+      setToDos((todo) =>
+         todo.filter((item) => {
+            if (item.id === todoID) {
+               item.status = status;
+            }
+            return item;
+         })
+      );
+   };
+
+   return (
+      <div key={todo.id} className="todo">
+         {(listID === "onGo" || listID === "drop") && (
+            <div className="left">
+               <i
+                  className={`icon fas ${
+                     (listID === "onGo" && "fa-check tick") || (listID === "drop" && "fa-redo-alt retrieve")
+                  }`}
+                  title={`${(listID === "onGo" && "Done") || (listID === "drop" && "Retrieve")}`}
+                  onClick={() => {
+                     if (listID === "onGo") {
+                        handleToDoStatus(todo.id, "done");
+                     } else if (listID === "drop") {
+                        let isRetrieve = window.confirm("Retrieving dropped ToDo");
+                        if (isRetrieve) handleToDoStatus(todo.id, "onGo");
+                     }
+                  }}
+               ></i>
+            </div>
+         )}
+         <div className="top">
+            <p className={`text ${(listID === "done" || listID === "drop") && "text_blurLine"}`}>{todo.text}</p>
+         </div>
+         <div className="bottom">
+            <p className="time">{`${todo.moment.time} ${todo.moment.day}`}</p>
+            <p className="date">{`${todo.moment.date}`}</p>
+         </div>
+         {(listID === "done" || listID === "onGo" || listID === "drop") && (
+            <div className="right">
+               <i
+                  className={`icon fas ${
+                     (listID === "done" && "fa-trash-alt trash") ||
+                     (listID === "onGo" && "fa-times close") ||
+                     (listID === "drop" && "fa-trash-alt trash")
+                  }`}
+                  title={`${
+                     (listID === "done" && "Delete") ||
+                     (listID === "onGo" && "Drop") ||
+                     (listID === "drop" && "Delete")
+                  }`}
+                  onClick={() => {
+                     if (listID === "done") {
+                        let isdelete = window.confirm("Deleting ToDo permanently!");
+                        if (isdelete) handleToDoStatus(todo.id, "remove");
+                     } else if (listID === "onGo") {
+                        handleToDoStatus(todo.id, "drop");
+                     } else if (listID === "drop") {
+                        let isdelete = window.confirm("Deleting ToDo permanently!");
+                        if (isdelete) handleToDoStatus(todo.id, "remove");
+                     }
+                  }}
+               ></i>
+            </div>
+         )}
+      </div>
+   );
+};
+
 function App() {
    const [toDo, setToDo] = useState("");
    const [toDos, setToDos] = useState(() => {
@@ -58,7 +128,7 @@ function App() {
 
    const handleInputSubmit = (e) => {
       e.preventDefault();
-      if (toDo) {
+      if (toDo.split("\n").join("").length > 0) {
          setToDos([
             ...toDos,
             {
@@ -78,17 +148,6 @@ function App() {
 
    const resetInputField = () => {
       setToDo("");
-   };
-
-   const handleToDoStatus = (todoID, status) => {
-      setToDos((todo) =>
-         todo.filter((item) => {
-            if (item.id === todoID) {
-               item.status = status;
-            }
-            return item;
-         })
-      );
    };
 
    useEffect(() => {
@@ -129,118 +188,41 @@ function App() {
             </div>
             <div className="input-btns">
                <button className="add-btn" type="submit">
-                  <i className="fas fa-plus" title="Add"></i>
+                  <i className="fas fa-plus add" title="Add"></i>
                </button>
                <button className="erase-btn">
-                  <i onClick={resetInputField} className="fas fa-eraser" title="Clear"></i>
+                  <i className="fas fa-eraser erase" title="Clear" onClick={resetInputField}></i>
                </button>
             </div>
          </form>
-
-         {/* *********** */}
-
-         {/* container done */}
-         <div className="container done">
+         {/* list section */}
+         {/* list done */}
+         <div className="list done">
             <h3 className="heading">Done</h3>
             {toDos &&
                toDos.map((todo) => {
                   if (todo.status === "done") {
-                     return (
-                        <div key={todo.id} className="toDo">
-                           <div className="left"></div>
-                           <div className="top">
-                              <p className="textCross">{todo.text}</p>
-                           </div>
-                           <div className="bottom">
-                              <p>{`${todo.moment.time} ${todo.moment.day}`}</p>
-                              <p>{`${todo.moment.date}`}</p>
-                           </div>
-                           <div className="right bin">
-                              <i
-                                 className="fas fa-trash-alt"
-                                 title="Delete"
-                                 onClick={() => {
-                                    let isdelete = window.confirm("Deleting ToDo permanently!");
-                                    if (isdelete) handleToDoStatus(todo.id, "remove");
-                                 }}
-                              ></i>
-                           </div>
-                        </div>
-                     );
+                     return <TodoContainer key={todo.id} listID={todo.status} todo={todo} setToDos={setToDos} />;
                   } else return null;
                })}
          </div>
-         {/* container onGoing */}
-         <div className="container onGoing">
+         {/* list onGo */}
+         <div className="list onGo">
             <h3 className="heading">On Going</h3>
             {toDos &&
                toDos.map((todo) => {
                   if (todo.status === "onGo") {
-                     return (
-                        <div key={todo.id} className="toDo">
-                           <div className="left tick">
-                              <i
-                                 className="fas fa-check"
-                                 title="Done"
-                                 onClick={() => handleToDoStatus(todo.id, "done")}
-                              ></i>
-                           </div>
-                           <div className="top">
-                              <p>{todo.text}</p>
-                           </div>
-                           <div className="bottom">
-                              <p>{`${todo.moment.time} ${todo.moment.day}`}</p>
-                              <p>{`${todo.moment.date}`}</p>
-                           </div>
-                           <div className="right close">
-                              <i
-                                 className="fas fa-times"
-                                 title="Drop"
-                                 onClick={() => handleToDoStatus(todo.id, "drop")}
-                              ></i>
-                           </div>
-                        </div>
-                     );
+                     return <TodoContainer key={todo.id} listID={todo.status} todo={todo} setToDos={setToDos} />;
                   } else return null;
                })}
          </div>
-         {/* container dropped */}
-         <div className="container dropped">
+         {/* list drop */}
+         <div className="list drop">
             <h3 className="heading">Dropped</h3>
             {toDos &&
                toDos.map((todo) => {
                   if (todo.status === "drop") {
-                     return (
-                        <div key={todo.id} className="toDo">
-                           <div className="left recycle">
-                              <i
-                                 className="fas fa-redo-alt"
-                                 title="Retrieve"
-                                 onClick={() => {
-                                    let isRetrieve = window.confirm("Retrieving dropped ToDo");
-                                    if (isRetrieve) handleToDoStatus(todo.id, "onGo");
-                                 }}
-                              ></i>
-                           </div>
-                           <div className="top">
-                              <p className="textCross">{todo.text}</p>
-                           </div>
-                           <div className="bottom">
-                              <p>{`${todo.moment.time} ${todo.moment.day}`}</p>
-                              <p>{`${todo.moment.date}`}</p>
-                           </div>
-                           <div className="right bin">
-                              <i
-                                 className="fas fa-trash-alt"
-                                 title="Delete"
-                                 onClick={() => {
-                                    let isdelete = window.confirm("Deleting ToDo permanently!");
-                                    if (isdelete) handleToDoStatus(todo.id, "remove");
-                                 }}
-                              ></i>
-                           </div>
-                        </div>
-                     );
+                     return <TodoContainer key={todo.id} listID={todo.status} todo={todo} setToDos={setToDos} />;
                   } else return null;
                })}
          </div>
