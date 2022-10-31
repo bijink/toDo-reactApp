@@ -1,298 +1,317 @@
+:root {
+   --color_black: rgb(0, 9, 14);
+   --color_green: seagreen;
+   --color_yellow: darkgoldenrod;
+   --color_red: brown;
+   --primary_borderRadius: 0.25rem;
+}
+
+/* * global styles * */
 * {
    padding: 0;
    margin: 0;
 }
-
 body {
-   background-color: rgb(0, 9, 14);
+   background-color: var(--color_black);
+   color: rgb(255, 255, 255);
 }
-
-.gradient-text {
-   background-image: linear-gradient(80deg, rgb(90, 255, 162), rgb(255, 63, 63));
+.gradient-text1 {
+   background-image: linear-gradient(90deg, rgb(80, 170, 120), rgb(201, 150, 40), rgb(190, 80, 80));
    background-clip: text;
    -webkit-text-fill-color: transparent;
 }
-
 .gradient-text2 {
-   background-image: linear-gradient(45deg, rgb(135, 255, 251), rgb(255, 145, 145));
+   background-image: linear-gradient(90deg, rgb(255, 245, 225), rgb(255, 245, 205), rgb(255, 200, 200));
    background-clip: text;
    -webkit-text-fill-color: transparent;
 }
 
-.textCross {
+/* * text 'blur & line-through' in list done & drop * */
+.text_blurLine {
    text-decoration: line-through;
+   filter: blur(1.2px);
+   transition: filter 400ms;
+}
+.list:hover > .toDos .todo .top .text.text_blurLine {
+   text-decoration: none;
+}
+.list .toDos .todo:hover > .top .text.text_blurLine {
+   filter: none;
 }
 
-/* ** i tag ** */
-
-i {
-   cursor: pointer;
+/* * icon colors * */
+.add {
+   color: rgb(0, 0, 0);
 }
-
-.toDoInput i {
-   font-size: large;
-   color: rgb(84, 84, 84);
+.erase {
+   color: rgb(50, 50, 50);
 }
-
-.container i {
-   font-size: larger;
-   margin-top: .16rem;
+.tick {
+   color: var(--color_green);
 }
-
-.container .toDo .bin i {
+.close {
+   color: var(--color_red);
+}
+.retrieve {
+   color: rgb(46, 75, 164);
+}
+.trash {
    color: rgb(69, 69, 69);
 }
-
-.container .toDo .close i {
-   color: brown;
+.clock {
+   color: var(--color_yellow);
 }
-
-.container .toDo .tick i {
-   color: seagreen;
-}
-
-.container .toDo .recycle i {
-   color: rgb(46, 75, 164);
+.arrow {
+   color: var(--color_black);
 }
 
 /* ** Headings ** */
-
-.mainHeading {
+.headings {
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+   align-items: center;
+   cursor: default;
+}
+.headings .mainHeading {
    text-align: center;
    margin-top: 2rem;
-   color: white;
+   color: rgb(255, 255, 255);
 }
-
-.subHeading {
+.headings .mainHeading h1 {
+   font-size: 3rem;
+   font-family: "Macondo", cursive;
+}
+.headings .subHeading {
    text-align: center;
-   color: white;
+}
+.headings .subHeading h2 {
+   font-size: 2rem;
+   font-family: "Shalimar", cursive;
 }
 
-/* ** ToDO Input ** */
-
-.toDoInput {
+/* ** ToDo Input ** */
+.inputForm {
    width: 30%;
-   height: 3.5rem;
    background-color: rgb(255, 255, 255);
    box-shadow: 0 0 2px 1px rgb(255, 255, 255);
    margin: auto;
    margin-top: 1rem;
-   border-radius: .25rem;
-   display: grid;
-   grid-template-columns: 84% 8% 8%;
+   border-radius: var(--primary_borderRadius);
+   padding: 2px 0;
+   display: flex;
 }
-
-.toDoInput .left input {
-   width: 98%;
-   height: 90%;
-   margin-top: .8%;
-   margin-left: 1%;
-   border: unset;
-   border-radius: .25rem;
+.inputForm .input {
+   width: 100%;
+   padding: 1px 8px 0 2px;
+}
+.inputForm .input textarea {
+   width: 100%;
+   font-family: "Architects Daughter", cursive;
+   resize: vertical;
+   font-size: 1.2rem;
+   line-height: 1.5rem;
    outline: none;
-   padding-left: .3rem;
-   font-size: x-large;
-   font-family: inherit;
-   font-weight: bold;
+   border: none;
+   border-radius: var(--primary_borderRadius);
+   padding: 2px;
+   padding-left: 3px;
+   min-height: 4.5rem;
+   margin-bottom: -4px;
 }
-
-.toDoInput .right {
+.inputForm .input-btns {
    display: flex;
-   justify-content: center;
-   align-items: center;
+   flex-direction: column;
+   justify-content: flex-start;
+   padding-right: 5px;
+}
+.inputForm .input-btns > * {
+   border: none;
+   outline: none;
+   background-color: transparent;
+   margin: 8px 0;
+   cursor: pointer;
+}
+.inputForm .input-btns > * :hover {
+   color: rgb(85, 85, 85);
+}
+.inputForm .input-btns > * i {
+   font-size: 1.4rem;
 }
 
-.toDoInput .rightEnd {
-   display: flex;
-   justify-content: center;
-   align-items: center;
-}
-
-/* ** Container ** */
-
-.container {
+/* ** List container ** */
+.list {
    height: 100%;
    width: 30%;
    float: left;
-   margin-top: 2.5%;
+   margin: 1.5rem 0;
    margin-left: 2.5%;
-   padding-top: 1rem;
-   padding-bottom: 1rem;
-   border-radius: .25rem;
+   padding: 1rem 0;
+   border-radius: var(--primary_borderRadius);
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+}
+.list.done {
+   background-color: var(--color_green);
+   box-shadow: 0 0 2px 2px var(--color_green);
+}
+.list.onGo {
+   background-color: var(--color_yellow);
+   box-shadow: 0 0 2px 2px var(--color_yellow);
+}
+.list.drop {
+   background-color: var(--color_red);
+   box-shadow: 0 0 2px 2px var(--color_red);
+}
+.list .heading {
+   color: black;
+   font-family: "Architects Daughter", cursive;
+   cursor: default;
+}
+.list .toDos {
+   width: 100%;
+   display: flex;
+   flex-direction: column-reverse;
+   align-items: center;
+}
+.list .toDos .todo {
+   width: 92%;
+   height: 100%;
+   background-color: rgba(255, 255, 255, 0.18);
+   margin-top: 0.5rem;
+   padding: 5px;
+   border-radius: var(--primary_borderRadius);
+   display: grid;
+   grid-template-columns: auto 1fr auto;
+   grid-template-areas:
+      "todo-left todo-top todo-right"
+      "todo-left todo-bottom todo-right";
+   transition: transform 400ms;
+}
+.list .toDos .todo:hover {
+   background-color: rgba(255, 255, 255, 0.3);
+   transform: scaleX(1.03);
+}
+.list .toDos .todo .left,
+.list .toDos .todo .right {
+   width: 25px;
+}
+.list .toDos .todo .top,
+.list .toDos .todo .bottom {
+   padding: 0 2px;
+   min-width: 0;
+}
+.list .toDos .todo .left {
+   grid-area: todo-left;
+}
+.list .toDos .todo .top {
+   grid-area: todo-top;
+}
+.list .toDos .todo .bottom {
+   grid-area: todo-bottom;
+   display: flex;
+   justify-content: space-between;
+   padding-top: 2px;
+}
+.list .toDos .todo .right {
+   grid-area: todo-right;
+}
+.list .toDos .todo > * .icon {
+   width: inherit;
+   height: 25px;
    display: flex;
    justify-content: center;
    align-items: center;
-   flex-direction: column;
+   border-radius: 0.5rem;
+   cursor: pointer;
+   font-size: 1.2rem;
 }
-
-.container .toDo {
-   width: 92%;
-   height: 100%;
-   background-color: rgb(241, 241, 241, 0.2);
-   margin-top: .5rem;
-   padding: 5px;
-   border-radius: .25rem;
-   transition: width 200ms;
+.list .toDos .todo .left .icon.retrieve {
+   transform: scale(-1, 1);
 }
-
-.container .toDo:hover {
-   background-color: rgba(241, 241, 241, 0.313);
-   width: 95%;
-}
-
-.container .toDo .top p {
-   word-wrap: break-word;
+.list .toDos .todo .top .text {
+   color: black;
    text-align: justify;
-   font-size: large;
-   font-weight: 700;
+   word-wrap: break-word;
+   white-space: pre-wrap;
+   line-height: 1.6rem;
+   font-size: 1.2rem;
+   font-family: "Architects Daughter", cursive;
+}
+.list .toDos .todo .bottom > * {
    cursor: default;
+   color: rgba(0, 0, 0, 0.5);
+   font-size: 0.9rem;
+   font-family: "Stylish", sans-serif;
 }
 
-.container .toDo .bottom p {
-   font-size: small;
-   cursor: default;
+/* * Bottom NavBar (mobile) * */
+.bottomNav {
+   display: none;
+   background-color: var(--color_black);
+   width: 100%;
+   height: 3.2rem;
+   box-shadow: 0 0 2px 2px var(--color_black);
+   position: fixed;
+   bottom: 0;
+}
+.bottomNav > * {
+   margin: 6px 5px;
+   width: 100%;
+   display: flex;
+   justify-content: space-evenly;
+   align-items: center;
+   border-radius: 1.5rem;
+}
+.bottomNav > :first-child {
+   margin-left: 20px;
+}
+.bottomNav > :last-child {
+   margin-right: 20px;
+}
+.bottomNav .nav_on {
+   background-color: rgba(255, 255, 255, 0.1);
+}
+.bottomNav > * .icon {
+   font-size: 1.5rem;
+}
+.bottomNav > * .icon_sm {
+   font-size: 0.7rem;
+}
+.bottomNav > * .hidden_icon {
+   color: transparent;
 }
 
-/* ** Container Completed ** */
-
-.container.done {
-   background-color: seagreen;
-   box-shadow: 0 0 2px 2px seagreen;
-}
-
-.container.done .toDo {
-   display: grid;
-   grid-template-columns: auto auto auto;
-   grid-template-rows: auto auto;
-}
-
-.container.done .toDo .top {
-   width: 25.5vw;
-}
-
-.container.done .toDo .left {
-   grid-column-start: 1;
-   grid-column-end: 2;
-   grid-row-start: 1;
-   grid-row-end: 3;
-}
-
-.container.done .toDo .right {
-   grid-column-start: 3;
-   grid-column-end: 4;
-   grid-row-start: 1;
-   grid-row-end: 3;
-}
-
-/* ** Container Progressing ** */
-
-.container.onGoing {
-   background-color: darkgoldenrod;
-   box-shadow: 0 0 2px 2px darkgoldenrod;
-}
-
-.container.onGoing .toDo {
-   display: grid;
-   grid-template-columns: auto auto auto;
-   grid-template-rows: auto auto;
-}
-
-.container.onGoing .toDo .top {
-   width: 24vw;
-}
-
-.container.onGoing .toDo .left {
-   grid-column-start: 1;
-   grid-column-end: 2;
-   grid-row-start: 1;
-   grid-row-end: 3;
-}
-
-.container.onGoing .toDo .right {
-   grid-column-start: 3;
-   grid-column-end: 4;
-   grid-row-start: 1;
-   grid-row-end: 3;
-}
-
-/* ** Container Dropped ** */
-
-.container.dropped {
-   background-color: brown;
-   box-shadow: 0 0 2px 2px brown;
-}
-
-.container.dropped .toDo {
-   display: grid;
-   grid-template-columns: auto auto auto;
-   grid-template-rows: auto auto;
-}
-
-.container.dropped .toDo .top {
-   width: 23.5vw;
-}
-
-.container.dropped .toDo .left {
-   grid-column-start: 1;
-   grid-column-end: 2;
-   grid-row-start: 1;
-   grid-row-end: 3;
-}
-
-.container.dropped .toDo .right {
-   grid-column-start: 3;
-   grid-column-end: 4;
-   grid-row-start: 1;
-   grid-row-end: 3;
-}
-
-/* ** media queries for setting width of 'toDo' between 950px and 430px display ** */
-
-@media only screen and (max-width:950px) and (min-width:430px) {
-   .container.done .toDo .top {
-      width: 23vw;
-   }
-   .container.onGoing .toDo .top {
-      width: 18.5vw;
-      margin-left: 1vw;
-   }
-   .container.onGoing .toDo .bottom {
-      width: 18.5vw;
-      margin-left: 1vw;
-   }
-   .container.dropped .toDo .top {
-      width: 19vw;
-      margin-left: 1vw;
-   }
-   .container.dropped .toDo .bottom {
-      margin-left: 1vw;
+/* * media queries * */
+@media only screen and (max-width: 1080px) {
+   .inputForm {
+      width: 55%;
    }
 }
-
-/* ** media queries for setting width of 'toDoInput' below 800px display ** */
-
-@media only screen and (max-width:800px) {
-   .toDoInput {
+@media only screen and (max-width: 840px) {
+   .inputForm {
+      width: 65%;
+   }
+}
+@media only screen and (max-width: 600px) {
+   /* * mobile * */
+   .text_blurLine {
+      text-decoration: none;
+   }
+   .inputForm {
       width: 95%;
    }
-}
-
-/* ** media queries for setting width of 'container, toDo' below 430px display ** */
-
-@media only screen and (max-width:430px) {
-   .container {
-      width: 94.82%;
+   .list {
+      width: 95%;
+      margin-bottom: 4.5rem;
    }
-   .toDoInput .left input {
-      width: 92%;
+   .list.done,
+   .list.onGo,
+   .list.drop {
+      display: none;
    }
-   .container.done .toDo .top {
-      width: 80vw;
-   }
-   .container.onGoing .toDo .top {
-      width: 70vw;
-   }
-   .container.dropped .toDo .top {
-      width: 70vw;
+   .bottomNav {
+      display: flex;
    }
 }

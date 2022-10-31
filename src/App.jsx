@@ -1,39 +1,131 @@
-import { useEffect, useState } from 'react';
-import './App.css';
+import { useEffect, useState } from "react";
+import "./App.css";
+
+const TodoContainer = ({ listID, todo, setToDos }) => {
+   const handleToDoStatus = (todoID, status) => {
+      setToDos((todo) =>
+         todo.filter((item) => {
+            if (item.id === todoID) {
+               item.status = status;
+            }
+            return item;
+         })
+      );
+   };
+
+   return (
+      <div key={todo.id} className="todo">
+         {(listID === "onGo" || listID === "drop") && (
+            <div className="left">
+               <i
+                  className={`icon fas ${
+                     (listID === "onGo" && "fa-check tick") || (listID === "drop" && "fa-redo-alt retrieve")
+                  }`}
+                  title={`${(listID === "onGo" && "Done") || (listID === "drop" && "Retrieve")}`}
+                  onClick={() => {
+                     if (listID === "onGo") {
+                        handleToDoStatus(todo.id, "done");
+                     } else if (listID === "drop") {
+                        let isRetrieve = window.confirm("Retrieving dropped ToDo");
+                        if (isRetrieve) handleToDoStatus(todo.id, "onGo");
+                     }
+                  }}
+               ></i>
+            </div>
+         )}
+         <div className="top">
+            <p className={`text ${(listID === "done" || listID === "drop") && "text_blurLine"}`}>{todo.text}</p>
+         </div>
+         <div className="bottom">
+            <p className="time">{`${todo.moment.time} ${todo.moment.day}`}</p>
+            <p className="date">{`${todo.moment.date}`}</p>
+         </div>
+         {(listID === "done" || listID === "onGo" || listID === "drop") && (
+            <div className="right">
+               <i
+                  className={`icon fas ${
+                     (listID === "done" && "fa-trash-alt trash") ||
+                     (listID === "onGo" && "fa-times close") ||
+                     (listID === "drop" && "fa-trash-alt trash")
+                  }`}
+                  title={`${
+                     (listID === "done" && "Delete") ||
+                     (listID === "onGo" && "Drop") ||
+                     (listID === "drop" && "Delete")
+                  }`}
+                  onClick={() => {
+                     if (listID === "done") {
+                        let isdelete = window.confirm("Deleting ToDo permanently!");
+                        if (isdelete) handleToDoStatus(todo.id, "remove");
+                     } else if (listID === "onGo") {
+                        handleToDoStatus(todo.id, "drop");
+                     } else if (listID === "drop") {
+                        let isdelete = window.confirm("Deleting ToDo permanently!");
+                        if (isdelete) handleToDoStatus(todo.id, "remove");
+                     }
+                  }}
+               ></i>
+            </div>
+         )}
+      </div>
+   );
+};
 
 function App() {
-
-   const [toDo, setToDo] = useState('');
+   const [toDo, setToDo] = useState("");
    const [toDos, setToDos] = useState(() => {
-      // getting stored toDos data from localStorage
-      const saved = localStorage.getItem("Storage");
+      // #getting stored toDos data from localStorage
+      const saved = localStorage.getItem("todo_list_data");
       const initialValue = JSON.parse(saved);
-      return (initialValue || "");
+      return initialValue || [];
    });
+   // #valid values are <'nav_done' | 'nav_onGo' | 'nav_drop'>
+   const [bottomNavItemID, setBottomNavItemID] = useState("nav_onGo");
+   // #state values for bottomNavBar swipe controls (mobile)
+   const [touchStart, setTouchStart] = useState(0);
+   const [touchEnd, setTouchEnd] = useState(0);
 
-   //Program to removing correspondend toDos data from localStorage of browser
-   const index = toDos && toDos.findIndex(obj => obj.statusRemove == true);
-   // console.log(index);
-   if (index > -1) toDos && toDos.splice((index), 1);
+   // #to get current time in '12hour' format
+   const getTime = () => {
+      const currDate = new Date();
 
+      const hour = currDate.getHours();
+      const minute = currDate.getMinutes();
+      const AMorPM = hour >= 12 ? "PM" : "AM";
+      // #convert 24hour into 12hour
+      let hour_12 = hour % 12;
+      if (hour_12 === 0) hour_12 = 12;
+      // #convert hour numbers less than 10 into 2 digit number (eg: 5 ==> 05)
+      let minute_00 = minute.toString();
+      if (minute < 10) minute_00 = `0${minute}`;
 
-   const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-   const date = new Date();
-   const day = dayNames[date.getDay()];
-
-   const dayNamesShort = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-   const currDate = new Date();
-   const hours = currDate.getHours();
-   const AMorPM = hours >= 12 ? 'PM' : 'AM';
-   var hour = hours % 12;
-   const hour12 = () => {
-      if (hour === 0) hour = 12;
-      return hour;
+      return `${hour_12}:${minute_00} ${AMorPM}`;
    };
-   const toDoDate = currDate.getDate() + '.' + (currDate.getMonth() + 1) + '.' + currDate.getFullYear();
-   const toDoDay = dayNamesShort[currDate.getDay()];
-   const toDoTime = hour12() + ':' + currDate.getMinutes() + ':' + currDate.getSeconds() + ' ' + AMorPM;
-   const toDoTimeDateDay = toDoTime + ' ' + toDoDay + ' ' + toDoDate;
+
+   // #to get current 'day' of the week
+   const getDay = () => {
+      const currDate = new Date();
+      // #get current day in full letters
+      const dayNames_full = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+      const day_full = dayNames_full[currDate.getDay()];
+      // #get current day in short letters
+      const dayNames_short = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+      const day_short = dayNames_short[currDate.getDay()];
+
+      return {
+         full: day_full,
+         short: day_short,
+      };
+   };
+
+   // #to get current date in 'MMM DD, YYYY' format
+   const getDate = () => {
+      const currDate = new Date();
+      // #to split into month, dayNum, year array
+      const dateSplit = currDate.toString().slice(4, 15).split(" ");
+
+      return `${dateSplit[0]} ${dateSplit[1]}, ${dateSplit[2]}`;
+   };
 
    const handleUserInput = (e) => {
       setToDo(e.target.value);
@@ -41,218 +133,187 @@ function App() {
 
    const handleInputSubmit = (e) => {
       e.preventDefault();
-      if (toDo) {
-         setToDos([...toDos, {
-            id: Date.now(),
-            text: toDo,
-            toDoTime: toDoTimeDateDay,
-            statusErase: false,
-            statusDone: false,
-            statusDrop: false,
-            statusRetrieve: false,
-            statusRemove: false
-         }]);
-         setToDo('');
+      if (toDo.split("\n").join("").length > 0) {
+         setToDos([
+            ...toDos,
+            {
+               id: Date.now(),
+               text: toDo,
+               status: "onGo", // #valid values are <'done' | 'onGo' | 'drop' | 'remove'>
+               moment: {
+                  time: getTime(),
+                  day: getDay()?.short,
+                  date: getDate(),
+               },
+            },
+         ]);
+         setToDo("");
+         setBottomNavItemID("nav_onGo");
       }
    };
+
    const resetInputField = () => {
-      setToDo('');
+      setToDo("");
+   };
+
+   const handleBottomNavControl = (navItemID) => {
+      setBottomNavItemID(navItemID);
    };
 
    useEffect(() => {
-      // storing toDos data to localStorage of browser
-      localStorage.setItem("Storage", JSON.stringify(toDos));
+      // #program to removing correspondend toDo from toDos data
+      if (toDos) {
+         const index = toDos.findIndex((obj) => obj.status === "remove");
+         if (index > -1) toDos.splice(index, 1);
+      }
+      // #storing toDos data to localStorage of browser
+      localStorage.setItem("todo_list_data", JSON.stringify(toDos));
    }, [toDos]);
+
+   function handleTouchStart(e) {
+      setTouchStart(e.targetTouches[0].clientX);
+   }
+   function handleTouchMove(e) {
+      setTouchEnd(e.targetTouches[0].clientX);
+   }
+
+   useEffect(() => {
+      // #swipe from right to left ==> touchValue -ve
+      // #swipe from left to right ==> touchValue +ve
+      const touchValue = touchEnd - touchStart;
+      const swipeSensitivity = 150; //#lesser is more sensitivity
+      if (touchEnd !== null) {
+         // console.log(touchStart, touchEnd, touchValue);
+         if (touchValue > swipeSensitivity) {
+            if (bottomNavItemID === "nav_done") {
+               setBottomNavItemID("nav_onGo");
+               setTouchStart(touchEnd);
+            } else if (bottomNavItemID === "nav_onGo") {
+               setBottomNavItemID("nav_drop");
+               setTouchStart(touchEnd);
+            }
+         }
+         if (touchValue < -swipeSensitivity) {
+            if (bottomNavItemID === "nav_drop") {
+               setBottomNavItemID("nav_onGo");
+               setTouchStart(touchEnd);
+            } else if (bottomNavItemID === "nav_onGo") {
+               setBottomNavItemID("nav_done");
+               setTouchStart(touchEnd);
+            }
+         }
+      }
+
+      return () => setTouchEnd(null);
+   }, [touchEnd, touchStart, bottomNavItemID]);
 
    return (
       <div className="app">
-
+         {/* heading section */}
          <div className="headings">
             <div className="mainHeading">
-               <h1 className="gradient-text">ToDo List</h1>
+               <h1 className="gradient-text1">ToDo List</h1>
             </div>
             <div className="subHeading">
-               <h2 className="gradient-text2">Hey, it's {day}</h2>
+               <h2 className="">
+                  Hey, it's <span className="gradient-text2">{getDay()?.full}</span>
+               </h2>
             </div>
          </div>
-
-         <form onSubmit={handleInputSubmit}>
-            <div className="toDoInput">
-               <div className="left">
-                  <input value={toDo} onChange={handleUserInput} type="text" placeholder=" Plan Something . . ." />
-               </div>
-               <div className="right erase">
-                  <i onClick={resetInputField} className="fas fa-eraser" title="Clear"></i>
-               </div>
-               <div className="rightEnd  add">
-                  <button style={{ border: 'none', outline: 'none', backgroundColor: '#fff' }} type="submit"><i className="fas fa-plus" title="Add"></i></button>
-               </div>
+         {/* input section */}
+         <form className="inputForm" onSubmit={handleInputSubmit}>
+            <div className="input">
+               <textarea
+                  id="todo-textarea"
+                  name="todo-textarea"
+                  rows="3"
+                  cols="50"
+                  value={toDo}
+                  onChange={handleUserInput}
+                  placeholder="Plan Something . . ."
+               />
+            </div>
+            <div className="input-btns">
+               <button className="add-btn" type="submit">
+                  <i className="fas fa-plus add" title="Add"></i>
+               </button>
+               <button className="erase-btn">
+                  <i className="fas fa-eraser erase" title="Clear" onClick={resetInputField}></i>
+               </button>
             </div>
          </form>
-
-         <div className="container done">
-            <h3>Done</h3>
-            {
-               toDos && toDos.map((obj) => {
-                  if (obj.statusDone && !obj.statusRemove) {
-                     return (
-                        <div key={obj.id} className="toDo">
-                           <div className="left"></div>
-                           <div className="top">
-                              <p className="textCross">{obj.text}</p>
-                           </div>
-                           <div className="bottom">
-                              <p>{obj.toDoTime}</p>
-                           </div>
-                           <div className="right bin">
-                              <i onClick={(e) => {
-                                 let isdelete = window.confirm("Deleting ToDo permanently !");
-                                 if (isdelete) {
-                                    e.target.value = true;
-                                 }
-                                 setToDos(toDos.filter((obj2) => {
-                                    if (obj2.id === obj.id) {
-                                       obj2.statusRemove = e.target.value;
-                                    }
-                                    return obj2;
-                                 }));
-                              }} value={obj.statusRemove} className="fas fa-trash-alt" title="Remove"></i>
-                           </div>
-                        </div>
-                     );
-                  }
-               })
-            }
+         {/* list section */}
+         {/* list done */}
+         <div className="list done" style={{ display: bottomNavItemID === "nav_done" && "flex" }}>
+            <h3 className="heading">Done</h3>
+            <div className="toDos">
+               {toDos &&
+                  toDos.map((todo) => {
+                     if (todo.status === "done") {
+                        return (
+                           <TodoContainer key={todo.id} listID={todo.status} todo={todo} setToDos={setToDos} />
+                        );
+                     } else return null;
+                  })}
+            </div>
          </div>
-
-         <div className="container onGoing">
-            <h3>On Going</h3>
-            {
-               toDos && toDos.map((obj) => {
-                  if (!obj.statusDone && !obj.statusDrop) {
-                     return (
-                        <div key={obj.id} className="toDo">
-                           <div className="left tick">
-                              <i onClick={(e) => {
-                                 e.target.value = true;
-                                 setToDos(toDos.filter((obj2) => {
-                                    if (obj2.id === obj.id) {
-                                       obj2.statusDone = e.target.value;
-                                    }
-                                    return obj2;
-                                 }));
-                              }} value={obj.statusDone} className="fas fa-check" title="Done"></i>
-                           </div>
-                           <div className="top">
-                              <p>{obj.text}</p>
-                           </div>
-                           <div className="bottom">
-                              <p>{obj.toDoTime}</p>
-                           </div>
-                           <div className="right close">
-                              <i onClick={(e) => {
-                                 e.target.value = true;
-                                 setToDos(toDos.filter((obj2) => {
-                                    if (obj2.id === obj.id) {
-                                       obj2.statusDrop = e.target.value;
-                                    }
-                                    return obj2;
-                                 }));
-                              }} value={obj.statusDrop} className="fas fa-times" title="Drop"></i>
-                           </div>
-                        </div>
-                     );
-                  } else if (obj.statusRetrieve && !obj.statusDone) {
-                     return (
-                        <div key={obj.id} className="toDo">
-                           <div className="left tick">
-                              <i onClick={(e) => {
-                                 e.target.value = true;
-                                 setToDos(toDos.filter((obj2) => {
-                                    if (obj2.id === obj.id) {
-                                       obj2.statusDone = e.target.value;
-                                    }
-                                    return obj2;
-                                 }));
-                              }} value={obj.statusDone} className="fas fa-check" title="Done"></i>
-                           </div>
-                           <div className="top">
-                              <p>{obj.text}</p>
-                           </div>
-                           <div className="bottom">
-                              <p>{obj.toDoTime}</p>
-                           </div>
-                           <div className="right close">
-                              <i onClick={(e) => {
-
-                                 e.target.value = true;
-                                 setToDos(toDos.filter((obj2) => {
-                                    if (obj2.id === obj.id) {
-                                       obj2.statusDrop = e.target.value;
-                                       obj.statusRetrieve = !e.target.value;
-                                    }
-                                    return obj2;
-                                 }));
-                              }} value={obj.statusDrop} className="fas fa-times" title="Drop"></i>
-                           </div>
-                        </div>
-                     );
-                  }
-               })
-            }
+         {/* list onGo */}
+         <div className="list onGo" style={{ display: bottomNavItemID === "nav_onGo" && "flex" }}>
+            <h3 className="heading">On Going</h3>
+            <div className="toDos">
+               {toDos &&
+                  toDos.map((todo) => {
+                     if (todo.status === "onGo") {
+                        return (
+                           <TodoContainer key={todo.id} listID={todo.status} todo={todo} setToDos={setToDos} />
+                        );
+                     } else return null;
+                  })}
+            </div>
          </div>
-
-         <div className="container dropped">
-            <h3>Dropped</h3>
-            {
-               toDos && toDos.map((obj) => {
-                  if (obj.statusDrop && !obj.statusRetrieve && !obj.statusRemove) {
-                     return (
-                        <div key={obj.id} className="toDo">
-                           <div className="left recycle">
-                              <i onClick={(e) => {
-                                 let isdelete = window.confirm("Retrieving dropped ToDo");
-                                 if (isdelete) {
-                                    e.target.value = true;
-                                 }
-                                 setToDos(toDos.filter((obj2) => {
-                                    if (obj2.id === obj.id) {
-                                       obj2.statusRetrieve = e.target.value;
-                                    }
-                                    return obj2;
-                                 }));
-                              }} value={obj.statusRetrieve} className="fas fa-redo-alt" title="Retrieve"></i>
-                           </div>
-                           <div className="top">
-                              <p className="textCross">{obj.text}</p>
-                           </div>
-                           <div className="bottom">
-                              <p>{obj.toDoTime}</p>
-                           </div>
-                           <div className="right bin">
-                              <i onClick={(e) => {
-                                 let isdelete = window.confirm("Deleting ToDo permanently !");
-                                 if (isdelete) {
-                                    e.target.value = true;
-                                 }
-                                 setToDos(toDos.filter((obj2) => {
-                                    if (obj2.id === obj.id) {
-                                       obj2.statusRemove = e.target.value;
-                                    }
-                                    return obj2;
-                                 }));
-                              }} value={obj.statusRemove} className="fas fa-trash-alt" title="Remove"></i>
-                           </div>
-                        </div>
-                     );
-                  }
-               })
-            }
+         {/* list drop */}
+         <div className="list drop" style={{ display: bottomNavItemID === "nav_drop" && "flex" }}>
+            <h3 className="heading">Dropped</h3>
+            <div className="toDos">
+               {toDos &&
+                  toDos.map((todo) => {
+                     if (todo.status === "drop") {
+                        return (
+                           <TodoContainer key={todo.id} listID={todo.status} todo={todo} setToDos={setToDos} />
+                        );
+                     } else return null;
+                  })}
+            </div>
          </div>
-
+         {/* bottom navBar (mobile) */}
+         <div id="bottom_nav" className="bottomNav" onTouchStart={handleTouchStart} onTouchMove={handleTouchMove}>
+            <div
+               className={`navDone ${bottomNavItemID === "nav_done" && "nav_on"}`}
+               onClick={() => handleBottomNavControl("nav_done")}
+            >
+               <i className="fas fa-chevron-left icon_sm hidden_icon"></i>
+               <i className="fas fa-check icon tick"></i>
+               <i className="fas fa-chevron-right icon_sm arrow"></i>
+            </div>
+            <div
+               className={`navOnGo ${bottomNavItemID === "nav_onGo" && "nav_on"}`}
+               onClick={() => handleBottomNavControl("nav_onGo")}
+            >
+               <i className="fas fa-chevron-left icon_sm arrow"></i>
+               <i className="far fa-clock icon clock"></i>
+               <i className="fas fa-chevron-right icon_sm arrow"></i>
+            </div>
+            <div
+               className={`navDrop ${bottomNavItemID === "nav_drop" && "nav_on"}`}
+               onClick={() => handleBottomNavControl("nav_drop")}
+            >
+               <i className="fas fa-chevron-left icon_sm arrow"></i>
+               <i className="fas fa-times icon close"></i>
+               <i className="fas fa-chevron-right icon_sm hidden_icon"></i>
+            </div>
+         </div>
       </div>
    );
-
 }
 
 export default App;
