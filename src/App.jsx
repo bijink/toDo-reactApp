@@ -26,7 +26,7 @@ const TodoContainer = ({ listID, todo, setToDos }) => {
                      if (listID === "onGo") {
                         handleToDoStatus(todo.id, "done");
                      } else if (listID === "drop") {
-                        let isRetrieve = window.confirm("Retrieving dropped ToDo");
+                        let isRetrieve = window.confirm("Retrieving dropped todo.");
                         if (isRetrieve) handleToDoStatus(todo.id, "onGo");
                      }
                   }}
@@ -49,19 +49,19 @@ const TodoContainer = ({ listID, todo, setToDos }) => {
                      (listID === "drop" && "fa-trash-alt trash")
                   }`}
                   title={`${
-                     (listID === "done" && "Delete") ||
+                     (listID === "done" && "Remove") ||
                      (listID === "onGo" && "Drop") ||
-                     (listID === "drop" && "Delete")
+                     (listID === "drop" && "Remove")
                   }`}
                   onClick={() => {
                      if (listID === "done") {
-                        let isdelete = window.confirm("Deleting ToDo permanently!");
-                        if (isdelete) handleToDoStatus(todo.id, "remove");
+                        let isRemove = window.confirm("Removing todo permanently!");
+                        if (isRemove) handleToDoStatus(todo.id, "remove");
                      } else if (listID === "onGo") {
                         handleToDoStatus(todo.id, "drop");
                      } else if (listID === "drop") {
-                        let isdelete = window.confirm("Deleting ToDo permanently!");
-                        if (isdelete) handleToDoStatus(todo.id, "remove");
+                        let isRemove = window.confirm("Removing todo permanently!");
+                        if (isRemove) handleToDoStatus(todo.id, "remove");
                      }
                   }}
                ></i>
@@ -183,7 +183,6 @@ function App() {
       const touchValue = touchEnd - touchStart;
       const swipeSensitivity = 150; //#lesser is more sensitivity
       if (touchEnd !== null) {
-         // console.log(touchStart, touchEnd, touchValue);
          if (touchValue > swipeSensitivity) {
             if (bottomNavItemID === "nav_done") {
                setBottomNavItemID("nav_onGo");
@@ -230,7 +229,8 @@ function App() {
                   cols="50"
                   value={toDo}
                   onChange={handleUserInput}
-                  placeholder="Plan Something . . ."
+                  placeholder="Plan something . . ."
+                  autoFocus
                />
             </div>
             <div className="input-btns">
