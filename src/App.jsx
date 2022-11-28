@@ -66,6 +66,11 @@ function App() {
 
    return (
       <div className="app">
+         <div className='appUpdateLogoContainer' >
+            <a href="https://todo-list-react-web.netlify.app">
+               <i class="fas fa-sync-alt" title='Update'></i>
+            </a>
+         </div>
 
          <div className="headings">
             <div className="mainHeading">

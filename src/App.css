@@ -296,3 +296,32 @@ i {
       width: 70vw;
    }
 }
+
+
+/* ** Update ** */
+.appUpdateLogoContainer{
+   position: absolute;
+   top: 1.5rem;
+   right: 2.5%;
+}
+.appUpdateLogoContainer a i {
+   font-size: larger;
+   transform: rotate(90deg);
+   background: linear-gradient(to top, rgb(46, 140, 87, 0.5) 0%, rgb(46, 140, 87, 0.5) 50%, rgb(30, 140, 230, 0.5) 50%, rgb(30, 140, 230, 0.5) 100%);
+   background-clip: text;
+   -webkit-text-fill-color: transparent;
+   animation: rotate 5s infinite;
+}
+@keyframes rotate {
+   0% {
+      transform: rotate(90deg)
+   }
+   100% {
+      transform: rotate(450deg)
+   }
+}
+@media only screen and (max-width: 720px) {
+   .appUpdateLogoContainer{
+      top: 0.8rem;
+   }
+}
