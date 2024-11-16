@@ -9,7 +9,7 @@ const TodoContainer = ({ listID, todo, setToDos }) => {
                item.status = status;
             }
             return item;
-         })
+         }),
       );
    };
 
@@ -49,9 +49,7 @@ const TodoContainer = ({ listID, todo, setToDos }) => {
                      (listID === "drop" && "fa-trash-alt trash")
                   }`}
                   title={`${
-                     (listID === "done" && "Remove") ||
-                     (listID === "onGo" && "Drop") ||
-                     (listID === "drop" && "Remove")
+                     (listID === "done" && "Remove") || (listID === "onGo" && "Drop") || (listID === "drop" && "Remove")
                   }`}
                   onClick={() => {
                      if (listID === "done") {
@@ -257,9 +255,7 @@ function App() {
                {toDos &&
                   toDos.map((todo) => {
                      if (todo.status === "done") {
-                        return (
-                           <TodoContainer key={todo.id} listID={todo.status} todo={todo} setToDos={setToDos} />
-                        );
+                        return <TodoContainer key={todo.id} listID={todo.status} todo={todo} setToDos={setToDos} />;
                      } else return null;
                   })}
             </div>
@@ -271,9 +267,7 @@ function App() {
                {toDos &&
                   toDos.map((todo) => {
                      if (todo.status === "onGo") {
-                        return (
-                           <TodoContainer key={todo.id} listID={todo.status} todo={todo} setToDos={setToDos} />
-                        );
+                        return <TodoContainer key={todo.id} listID={todo.status} todo={todo} setToDos={setToDos} />;
                      } else return null;
                   })}
             </div>
@@ -285,9 +279,7 @@ function App() {
                {toDos &&
                   toDos.map((todo) => {
                      if (todo.status === "drop") {
-                        return (
-                           <TodoContainer key={todo.id} listID={todo.status} todo={todo} setToDos={setToDos} />
-                        );
+                        return <TodoContainer key={todo.id} listID={todo.status} todo={todo} setToDos={setToDos} />;
                      } else return null;
                   })}
             </div>
