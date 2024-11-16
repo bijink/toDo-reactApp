@@ -121,10 +121,17 @@ function App() {
    // #to get current date in 'MMM DD, YYYY' format
    const getDate = () => {
       const currDate = new Date();
-      // #to split into month, dayNum, year array
-      const dateSplit = currDate.toString().slice(4, 15).split(" ");
 
-      return `${dateSplit[0]} ${dateSplit[1]}, ${dateSplit[2]}`;
+      // #regex(regular expressions) capture group to take month, dayNum, year from currDate
+      const regex = /(?<month>\w+) (?<dayNum>\d{2}) (?<year>\d{4})/;
+      const { dayNum, month, year } = regex.exec(currDate).groups;
+      // console.log(`${month} ${dayNum}, ${year}`);
+
+      // // #to split into month, dayNum, year array
+      // const dateSplit = currDate.toString().slice(4, 15).split(" ");
+
+      // return `${dateSplit[0]} ${dateSplit[1]}, ${dateSplit[2]}`;
+      return `${month} ${dayNum}, ${year}`;
    };
 
    const handleUserInput = (e) => {
