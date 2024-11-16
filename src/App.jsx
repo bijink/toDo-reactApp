@@ -1,73 +1,6 @@
 import { useEffect, useState } from "react";
 import "./App.css";
-
-const TodoContainer = ({ listID, todo, setToDos }) => {
-   const handleToDoStatus = (todoID, status) => {
-      setToDos((todo) =>
-         todo.filter((item) => {
-            if (item.id === todoID) {
-               item.status = status;
-            }
-            return item;
-         }),
-      );
-   };
-
-   return (
-      <div key={todo.id} className="todo">
-         {(listID === "onGo" || listID === "drop") && (
-            <div className="left">
-               <i
-                  className={`icon fas ${
-                     (listID === "onGo" && "fa-check tick") || (listID === "drop" && "fa-redo-alt retrieve")
-                  }`}
-                  title={`${(listID === "onGo" && "Done") || (listID === "drop" && "Retrieve")}`}
-                  onClick={() => {
-                     if (listID === "onGo") {
-                        handleToDoStatus(todo.id, "done");
-                     } else if (listID === "drop") {
-                        let isRetrieve = window.confirm("Retrieving dropped todo.");
-                        if (isRetrieve) handleToDoStatus(todo.id, "onGo");
-                     }
-                  }}
-               ></i>
-            </div>
-         )}
-         <div className="top">
-            <p className={`text ${(listID === "done" || listID === "drop") && "text_blurLine"}`}>{todo.text}</p>
-         </div>
-         <div className="bottom">
-            <p className="time">{`${todo.moment.time} ${todo.moment.day}`}</p>
-            <p className="date">{`${todo.moment.date}`}</p>
-         </div>
-         {(listID === "done" || listID === "onGo" || listID === "drop") && (
-            <div className="right">
-               <i
-                  className={`icon fas ${
-                     (listID === "done" && "fa-trash-alt trash") ||
-                     (listID === "onGo" && "fa-times close") ||
-                     (listID === "drop" && "fa-trash-alt trash")
-                  }`}
-                  title={`${
-                     (listID === "done" && "Remove") || (listID === "onGo" && "Drop") || (listID === "drop" && "Remove")
-                  }`}
-                  onClick={() => {
-                     if (listID === "done") {
-                        let isRemove = window.confirm("Removing todo permanently!");
-                        if (isRemove) handleToDoStatus(todo.id, "remove");
-                     } else if (listID === "onGo") {
-                        handleToDoStatus(todo.id, "drop");
-                     } else if (listID === "drop") {
-                        let isRemove = window.confirm("Removing todo permanently!");
-                        if (isRemove) handleToDoStatus(todo.id, "remove");
-                     }
-                  }}
-               ></i>
-            </div>
-         )}
-      </div>
-   );
-};
+import TodoContainer from "./TodoContainer";
 
 function App() {
    const [toDo, setToDo] = useState("");
@@ -83,10 +16,17 @@ function App() {
    const [touchStart, setTouchStart] = useState(0);
    const [touchEnd, setTouchEnd] = useState(0);
 
+   // #to get current date in 'MMM DD, YYYY' format
+   const getDate = () => {
+      const currDate = new Date();
+      // #regex(regular expressions) capture group to take month, dayNum, year from currDate
+      const regex = /(?<month>\w+) (?<dayNum>\d{2}) (?<year>\d{4})/;
+      const { dayNum, month, year } = regex.exec(currDate).groups;
+      return `${month} ${dayNum}, ${year}`;
+   };
    // #to get current time in '12hour' format
    const getTime = () => {
       const currDate = new Date();
-
       const hour = currDate.getHours();
       const minute = currDate.getMinutes();
       const AMorPM = hour >= 12 ? "PM" : "AM";
@@ -96,10 +36,8 @@ function App() {
       // #convert hour numbers less than 10 into 2 digit number (eg: 5 ==> 05)
       let minute_00 = minute.toString();
       if (minute < 10) minute_00 = `0${minute}`;
-
       return `${hour_12}:${minute_00} ${AMorPM}`;
    };
-
    // #to get current 'day' of the week
    const getDay = () => {
       const currDate = new Date();
@@ -109,33 +47,18 @@ function App() {
       // #get current day in short letters
       const dayNames_short = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
       const day_short = dayNames_short[currDate.getDay()];
-
       return {
          full: day_full,
          short: day_short,
       };
    };
 
-   // #to get current date in 'MMM DD, YYYY' format
-   const getDate = () => {
-      const currDate = new Date();
-
-      // #regex(regular expressions) capture group to take month, dayNum, year from currDate
-      const regex = /(?<month>\w+) (?<dayNum>\d{2}) (?<year>\d{4})/;
-      const { dayNum, month, year } = regex.exec(currDate).groups;
-      // console.log(`${month} ${dayNum}, ${year}`);
-
-      // // #to split into month, dayNum, year array
-      // const dateSplit = currDate.toString().slice(4, 15).split(" ");
-
-      // return `${dateSplit[0]} ${dateSplit[1]}, ${dateSplit[2]}`;
-      return `${month} ${dayNum}, ${year}`;
-   };
-
    const handleUserInput = (e) => {
       setToDo(e.target.value);
    };
-
+   const resetInputField = () => {
+      setToDo("");
+   };
    const handleInputSubmit = (e) => {
       e.preventDefault();
       if (toDo.split("\n").join("").length > 0) {
@@ -152,15 +75,19 @@ function App() {
                },
             },
          ]);
-         setToDo("");
+         resetInputField();
          setBottomNavItemID("nav_onGo");
       }
    };
-
-   const resetInputField = () => {
-      setToDo("");
+   const handleInputKeyDown = (e) => {
+      const isMobile = window.innerWidth <= 600;
+      if (e.key === "Enter") {
+         if (!e.shiftKey && !isMobile) {
+            e.preventDefault();
+            handleInputSubmit(e);
+         }
+      }
    };
-
    const handleBottomNavControl = (navItemID) => {
       setBottomNavItemID(navItemID);
    };
@@ -174,20 +101,12 @@ function App() {
       // #storing toDos data to localStorage of browser
       localStorage.setItem("todo_list_data", JSON.stringify(toDos));
    }, [toDos]);
-
-   function handleTouchStart(e) {
-      setTouchStart(e.targetTouches[0].clientX);
-   }
-   function handleTouchMove(e) {
-      setTouchEnd(e.targetTouches[0].clientX);
-   }
-
    useEffect(() => {
       // #swipe from right to left ==> touchValue -ve
       // #swipe from left to right ==> touchValue +ve
       const touchValue = touchEnd - touchStart;
-      const swipeSensitivity = 150; //#lesser is more sensitivity
-      if (touchEnd !== null) {
+      const swipeSensitivity = 100; //#lesser is more sensitivity
+      if (touchEnd) {
          if (touchValue > swipeSensitivity) {
             if (bottomNavItemID === "nav_done") {
                setBottomNavItemID("nav_onGo");
@@ -207,8 +126,7 @@ function App() {
             }
          }
       }
-
-      return () => setTouchEnd(null);
+      return () => setTouchEnd(0);
    }, [touchEnd, touchStart, bottomNavItemID]);
 
    return (
@@ -234,6 +152,7 @@ function App() {
                   cols="50"
                   value={toDo}
                   onChange={handleUserInput}
+                  onKeyDown={handleInputKeyDown}
                   placeholder="Plan something . . ."
                   autoFocus
                />
@@ -285,30 +204,29 @@ function App() {
             </div>
          </div>
          {/* bottom navBar (mobile) */}
-         <div id="bottom_nav" className="bottomNav" onTouchStart={handleTouchStart} onTouchMove={handleTouchMove}>
+         <div
+            id="bottom_nav"
+            className="bottomNav"
+            onTouchStart={(e) => setTouchStart(e.targetTouches[0].clientX)}
+            onTouchMove={(e) => setTouchEnd(e.targetTouches[0].clientX ?? 0)}
+         >
             <div
                className={`navDone ${bottomNavItemID === "nav_done" && "nav_on"}`}
                onClick={() => handleBottomNavControl("nav_done")}
             >
-               <i className="fas fa-chevron-left icon_sm hidden_icon"></i>
                <i className="fas fa-check icon tick"></i>
-               <i className="fas fa-chevron-right icon_sm arrow"></i>
             </div>
             <div
                className={`navOnGo ${bottomNavItemID === "nav_onGo" && "nav_on"}`}
                onClick={() => handleBottomNavControl("nav_onGo")}
             >
-               <i className="fas fa-chevron-left icon_sm arrow"></i>
                <i className="far fa-clock icon clock"></i>
-               <i className="fas fa-chevron-right icon_sm arrow"></i>
             </div>
             <div
                className={`navDrop ${bottomNavItemID === "nav_drop" && "nav_on"}`}
                onClick={() => handleBottomNavControl("nav_drop")}
             >
-               <i className="fas fa-chevron-left icon_sm arrow"></i>
                <i className="fas fa-times icon close"></i>
-               <i className="fas fa-chevron-right icon_sm hidden_icon"></i>
             </div>
          </div>
       </div>

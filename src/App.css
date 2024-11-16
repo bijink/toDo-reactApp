@@ -1,8 +1,9 @@
 :root {
-   --color_black: rgb(0, 9, 14);
+   --color_black: rgb(0, 0, 0);
    --color_green: seagreen;
    --color_yellow: darkgoldenrod;
    --color_red: brown;
+   --color_blue: rgb(36, 62, 140);
    --primary_borderRadius: 0.25rem;
 }
 
@@ -53,16 +54,13 @@ body {
    color: var(--color_red);
 }
 .retrieve {
-   color: rgb(46, 75, 164);
+   color: var(--color_blue);
 }
 .trash {
    color: rgb(69, 69, 69);
 }
 .clock {
    color: var(--color_yellow);
-}
-.arrow {
-   color: var(--color_black);
 }
 
 /* ** Headings ** */
@@ -313,5 +311,35 @@ body {
    }
    .bottomNav {
       display: flex;
+   }
+}
+
+/* Light Theme */
+@media (prefers-color-scheme: light) {
+   :root {
+      --color_white: rgb(247, 247, 247);
+      --color_green: #44cd80;
+      --color_yellow: #eaab0e;
+      --color_red: #dc3838;
+      --color_blue: #2f50b4;
+   }
+   body {
+      background-color: var(--color_white);
+   }
+   .gradient-text2 {
+      background-image: linear-gradient(90deg, rgb(53, 5, 5), rgb(88, 10, 10), rgb(137, 19, 19));
+   }
+   .headings .subHeading h2 {
+      color: var(--color_black);
+   }
+   .inputForm {
+      box-shadow: 0 0 4px 0.1px var(--color_black);
+   }
+   .bottomNav {
+      background-color: var(--color_white);
+      box-shadow: 0 0 2px 2px var(--color_white);
+   }
+   .bottomNav .nav_on {
+      background-color: rgba(0, 0, 0, 0.1);
    }
 }
